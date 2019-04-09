@@ -1,0 +1,49 @@
+#distance-nav-article{
+    height: 15px;
+}
+
+#container-registro{
+    background-color: aquamarine;
+    border-color: coral;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10%;
+    width: 600px;
+    height: 560px;
+    color: #ee6f41;
+}
+
+#container-registro h3{
+    position:relative; 
+    left:46%;
+}
+
+#container-registro p, 
+#container-registro form{
+    padding-left: 10px;
+}
+
+#container-registro input{
+    background-color: white;
+}
+
+#submit-box {
+    height: 100px;
+    width: 580px;
+}
+
+#submit-box textarea{
+    width: 250px;
+    height: 60px;
+    resize: none;
+    position: relative;
+    border-radius: 5%;
+    left: 10px;
+}
+
+#submit-box input{
+    position: relative;
+    left: 40%;
+    top: 18px;
+    background-color: #999;
+}

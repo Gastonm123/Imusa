@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>IMuSA Sitio Web</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+        <link rel="stylesheet" href="document.css">
+        <link rel="stylesheet" href="header.css">
+        <link rel="stylesheet" href="nav.css">
+        <link rel="stylesheet" href="sesion.css">
+        <script type="text/javascript" src="./lib/jquery-3.3.1.min.js"></script>
+        <script src="sesion.js"></script>
+    </head>
+    <body onload="configure()">
+        <header>
+            <table><tr>
+                <td id="nombre-pagina">
+                    Instituto Municipal de Salud Animal
+                </td>
+                <td id="imagen">
+                    <img src="logo.png"> 
+                </td>
+                <td id="costado-imagen">
+                    IMuSA
+                </td>
+            </tr></table>
+        </header>
+        
+        <div id="distance-header-nav"></div>
+        <nav>
+            <table><tr>
+                <td id="inicio">
+                    <a href="imusa.html">INICIO</a>
+                </td>
+                <td id="contacto">
+                    <a href="#">CONTACTO</a>
+                </td>
+                <td id="adopcion">
+                    <a href="#">ADOPCION</a>
+                </td>
+                <td id="sesion">
+                    <a href="sesion.html">[sesion]</a>
+                </td>
+            </tr></table>
+        </nav>
+
+        <div id="distance-nav-article"></div>
+        <article><div class="container">
+            <h2>Inicio de sesion</h2>
+            <form action="sesion.php" method="POST">
+                <div class="input-box">Usuario: <input id="user" type="text" name="user"> </div>
+                <div class="input-box">Password: <input id="pass" type="password" name="user-password"> </div>
+                <div class="input-box">Acceso: 
+                    <input type="radio" name="acceso" value="admin"> Admin
+                    <input type="radio" name="acceso" value="voluntario"> Voluntario
+                    <input type="radio" name="acceso" value="visitante"> Visitante
+                </div>
+                <div id="submit-box">
+                    <span id=registrarse><input type="button" value="Registrarse"></span>
+                    <input id="submit" type="submit" value="Ingresar">
+                </div>
+            </form>
+        </div></article>
+    </body>
+</html>

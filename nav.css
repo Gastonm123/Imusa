@@ -1,0 +1,23 @@
+#distance-header-nav {
+    height: 7px;
+}
+
+nav {
+    background-color: aquamarine;
+    width: 100%;
+    height: 10%; 
+}
+
+nav td{
+    width: 300px;
+    text-align: center;
+    border-style: solid;
+    border-width: 3px;
+    border-color: coral;
+    font-size: 15px;
+}
+
+nav td a{
+    color: inherit;
+    text-decoration: none;
+}
