@@ -4,12 +4,12 @@
         <meta charset="UTF-8">
         <title>IMuSA Sitio Web</title>
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
-        <link rel="stylesheet" href="document.css">
-        <link rel="stylesheet" href="header.css">
-        <link rel="stylesheet" href="nav.css">
-        <link rel="stylesheet" href="sesion.css">
-        <script type="text/javascript" src="./lib/jquery-3.3.1.min.js"></script>
-        <script src="sesion.js"></script>
+        <link rel="stylesheet" href="../css/document.css">
+        <link rel="stylesheet" href="../css/header.css">
+        <link rel="stylesheet" href="../css/nav.css">
+        <link rel="stylesheet" href="../css/sesion.css">
+        <script type="text/javascript" src="../lib/jquery-3.3.1.min.js"></script>
+        <script src="../js/sesion.js"></script>
     </head>
     <body onload="configure()">
         <header>
@@ -18,7 +18,7 @@
                     Instituto Municipal de Salud Animal.
                 </td>
                 <td id="imagen">
-                    <img src="logo.png"> 
+                    <img src="../logo.png"> 
                 </td>
                 <td id="costado-imagen">
                     IMuSA
@@ -30,7 +30,7 @@
         <nav>
             <table><tr>
                 <td id="inicio">
-                    <a href="imusa.html">INICIO</a>
+                    <a href="../index.html">INICIO</a>
                 </td>
                 <td id="contacto">
                     <a href="#">CONTACTO</a>
@@ -39,7 +39,7 @@
                     <a href="#">ADOPCION</a>
                 </td>
                 <td id="sesion">
-                    <a href="sesion.html">[sesion]</a>
+                    <a href="./sesion.html">[sesion]</a>
                 </td>
             </tr></table>
         </nav>
@@ -47,7 +47,7 @@
         <div id="distance-nav-article"></div>
         <article><div class="container">
             <h2>Inicio de sesion</h2>
-            <form action="sesion.php" method="POST">
+            <form action="../sesion.php" method="POST">
                 <div class="input-box">Usuario: <input id="user" type="text" name="user"> </div>
                 <div class="input-box">Password: <input id="pass" type="password" name="user-password"> </div>
                 <div class="input-box">Acceso: 

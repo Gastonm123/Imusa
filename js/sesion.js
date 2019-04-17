@@ -22,6 +22,6 @@ $(function(){
 
     $("#registrarse")
         .click(function(){
-            window.location.replace("./registrarse.html");
+            window.location.replace("../html/registrarse.html");
     });
 });
