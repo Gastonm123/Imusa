@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="../css/nav.css">
         <link rel="stylesheet" href="../css/registrarse.css">
         <script type="text/javascript" src="../lib/jquery-3.3.1.min.js"></script>
-        <script src="../js/registrarse.js"></script>
+        <!-- <script src="../js/registrarse.js"></script> -->
     </head>
     <body>
         <header>
@@ -49,14 +49,14 @@
             <h3>Registro</h3>
             <p>Complete los siguientes campos para concretar el registro</p>
             <form action="../registro.php" method="POST">
-                <p>Nombre: <input type="text" name="nombre"> </p>
-                <p>Apellido: <input type="text" name="apellido"> </p>
-                <p>Email: <input type="email" name="mail"> </p>
-                <p>Username: <input type="text" name="username"> </p>
-                <p>Password: <input type="password" name="password"> </p>
-                <p>Repita password: <input type="password" id="confirm"> </p>
-                <p>Fecha nacimiento: <input type="date" name="nacimiento"> </p>
-                <p>Nacionalidad: <input type="text" name="nacionalidad"> </p>
+                <p>Nombre: <input type="text" name="nombre" required> </p>
+                <p>Apellido: <input type="text" name="apellido" required> </p>
+                <p>Email: <input type="email" name="mail" required> </p>
+                <p>Username: <input type="text" name="username" required> </p>
+                <p>Password: <input type="password" name="password" required> </p>
+                <p>Repita password: <input type="password" id="confirm" required> </p>
+                <p>Fecha nacimiento: <input type="date" name="nacimiento" required> </p>
+                <p>Nacionalidad: <input type="text" name="nacionalidad" required> </p>
                 <p>D.N.I.: <input id="dni" type= "number" name="dni"> </p>
                 <p>A continuacion ponga una descripcion opcional de su persona: </p>
                 <div id="submit-box">

@@ -24,6 +24,7 @@ if($con->error) {
 }
 
 if($query->num_rows) {
+	#redirigir
 	die("Username or email already picked");
 }
 
@@ -38,7 +39,7 @@ $NACIMIENTO = $_POST["nacimiento"];
 $NACIONALIDAD = $_POST["nacionalidad"];
 
 $query = "INSERT INTO usuarios (email, username, password, name, surname, dni, birthday, nationality)
-		VALUES ('$MAIL', '$USER', $PASSWORD, $NOMBRE, $APELLIDO, $DNI, $NACIMIENTO, $NACIONALIDAD)";
+		VALUES ('$MAIL', '$USER', SHA1('$PASSWORD'), '$NOMBRE', '$APELLIDO', '$DNI', '$NACIMIENTO', '$NACIONALIDAD')";
 
 $con->query($query) or die($con->error);
 
@@ -55,5 +56,6 @@ if($DESCRIPCION){
 }
 
 die("\nRegistro finalizado\n");
+#redirigir
 
 ?>
