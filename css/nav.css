@@ -1,3 +1,4 @@
+/*             NAV              */
 #distance-header-nav {
     height: 7px;
 }
@@ -6,10 +7,15 @@ nav {
     background-color: aquamarine;
     width: 100%;
     height: 10%; 
+	display: flex;
+	padding-top: 5px;
 }
 
-nav td{
-    width: 300px;
+.center-item {
+	flex-grow: 1;
+}
+
+nav div {
     text-align: center;
     border-style: solid;
     border-width: 3px;
@@ -17,7 +23,46 @@ nav td{
     font-size: 15px;
 }
 
-nav td a{
+nav div a{
     color: inherit;
     text-decoration: none;
 }
+
+/*           HEADER        */
+header {
+    width: 100%;
+    height: 100px;
+    background-color: blue;
+	color: orange;
+	display: flex;
+	align-items: center;
+}
+
+#nombre-pagina {
+    font-size: 20px;
+    flex-grow: 1;
+    text-align: center;
+	flex-basis: 0;
+}
+
+#space {
+	flex-grow: 2;
+}
+
+#imagen {
+	flex-grow: 0.5;
+	flex-basis: 0;
+}
+
+#costado-imagen{
+	flex-grow: 0.5;
+    font-size: 25px;
+	flex-basis: 0;
+}
+
+/*           MAIN         */
+.main {
+	width: 75%;
+}
+
+/*           */
