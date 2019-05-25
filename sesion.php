@@ -25,6 +25,7 @@ if($con->error){
 
 if($ans->num_rows){
     #setear usuario en el servidor
+    #redirigir
     die('Sesion Iniciada');
 } else {
     die('Password o usuario incorrectas');
