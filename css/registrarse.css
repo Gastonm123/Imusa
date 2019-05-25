@@ -1,13 +1,10 @@
-#distance-nav-article{
-    height: 15px;
-}
-
 #container-registro{
     background-color: aquamarine;
     border-color: coral;
     border-width: 2px;
     border-style: solid;
     border-radius: 10%;
+    margin-top: 15px;
     width: 600px;
     height: 560px;
     color: #ee6f41;

@@ -3,67 +3,93 @@
     <head>
         <meta charset="UTF-8">
         <title>IMuSA Sitio Web</title>
-        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto"> 
         <link rel="stylesheet" href="../css/document.css">
         <link rel="stylesheet" href="../css/header.css">
         <link rel="stylesheet" href="../css/nav.css">
         <link rel="stylesheet" href="../css/registrarse.css">
         <script type="text/javascript" src="../lib/jquery-3.3.1.min.js"></script>
-        <!-- <script src="../js/registrarse.js"></script> -->
     </head>
     <body>
         <header>
-            <table><tr>
-                <td id="nombre-pagina">
-                    Instituto Municipal de Salud Animal
-                </td>
-                <td id="imagen">
-                    <img src="../logo.png"> 
-                </td>
-                <td id="costado-imagen">
-                    IMuSA
-                </td>
-            </tr></table>
+            <div id="nombre-pagina">
+                Instituto Municipal de Salud Animal
+            </div>
+            <div id="space"></div>
+            <div id="imagen">
+                <img src="logo.png"> 
+            </div>
+            <div id="costado-imagen">
+                IMuSA
+            </div>
         </header>
-        
-        <div id="distance-header-nav"></div>
+    
         <nav>
-            <table><tr>
-                <td id="inicio">
-                    <a href="../index.html">INICIO</a>
-                </td>
-                <td id="contacto">
-                    <a href="#">CONTACTO</a>
-                </td>
-                <td id="adopcion">
-                    <a href="#">ADOPCION</a>
-                </td>
-                <td id="sesion">
-                    <a href="./sesion.html">[sesion]</a>
-                </td>
-            </tr></table>
+            <div id="inicio" class="center-item">
+                <a href="../index.html">INICIO</a>
+            </div>
+            <div id="contacto" class="center-item">
+                <a href="#">CONTACTO</a>
+            </div>
+            <div id="adopcion" class="center-item">
+                <a href="#">ADOPCION</a>
+            </div>
+            <div id="sesion" class="center-item">
+                <a href="./sesion.html">[sesion]</a>
+            </div>
         </nav>
 
-        <div id="distance-nav-article"></div>
         <article id="container-registro">
             <h3>Registro</h3>
             <p>Complete los siguientes campos para concretar el registro</p>
-            <form action="../registro.php" method="POST">
-                <p>Nombre: <input type="text" name="nombre" required> </p>
-                <p>Apellido: <input type="text" name="apellido" required> </p>
-                <p>Email: <input type="email" name="mail" required> </p>
-                <p>Username: <input type="text" name="username" required> </p>
-                <p>Password: <input type="password" name="password" required> </p>
-                <p>Repita password: <input type="password" id="confirm" required> </p>
-                <p>Fecha nacimiento: <input type="date" name="nacimiento" required> </p>
-                <p>Nacionalidad: <input type="text" name="nacionalidad" required> </p>
-                <p>D.N.I.: <input id="dni" type= "number" name="dni"> </p>
-                <p>A continuacion ponga una descripcion opcional de su persona: </p>
-                <div id="submit-box">
-                    <textarea name="descripcion"></textarea> <br/>
-                    <input type="submit" value="Finalizar">
-                </div>
-            </form>
+
+            <p>Nombre: <input type="text" name="nombre" required> </p>
+            <p>Apellido: <input type="text" name="apellido" required> </p>
+            <p>Email: <input type="email" name="mail" required> </p>
+            <p>Username: <input type="text" name="username" required> </p>
+            <p>Password: <input type="password" name="password" required> </p>
+            <p>Repita password: <input type="password" id="confirm" required> </p>
+            <p>Fecha nacimiento: <input type="date" name="nacimiento" required> </p>
+            <p>Nacionalidad: <input type="text" name="nacionalidad" required> </p>
+            <p>D.N.I.: <input id="dni" type= "number" name="dni"> </p>
+            <p>A continuacion ponga una descripcion opcional de su persona: </p>
+            <div id="submit-box">
+                <textarea name="descripcion"></textarea> <br/>
+                <button id="finalizar">Finalizar</button>
+            </div>
         </article>
+
+        <script>
+            $("#finalizar").click(function() {
+                var nombre       = $("input[name=nombre]").val();
+                var apellido     = $("input[name=apellido]").val();
+                var mail         = $("input[name=mail]").val();
+                var username     = $("input[name=username]").val();
+                var password     = $("input[name=password]").val();
+                var nacimiento   = $("input[name=nacimiento]").val();
+                var nacionalidad = $("input[name=nacionalidad]").val();
+                var dni          = $("input[name=dni]").val();
+                var descripcion  = $("textarea[name=descripcion]").val();
+
+                $.post(
+                    '../registro.php',
+                    {
+                        nombre: nombre,
+                        apellido: apellido,
+                        mail: mail,
+                        username: username,
+                        password: password,
+                        nacimiento: nacimiento,
+                        nacionalidad: nacionalidad,
+                        dni: dni,
+                        descripcion: descripcion
+                    },
+                    function(data, status, xhr) {
+                        console.log('Request status: ' + status);
+                        alert(data);
+                    }
+                );
+            })
+        </script>
     </body>
 </html>

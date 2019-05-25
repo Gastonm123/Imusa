@@ -44,8 +44,8 @@ header {
 
 #nombre-pagina {
     font-size: 20px;
-    flex-grow: 1;
-    text-align: center;
+	flex-grow: 1;
+	padding-left: 10px;
 	flex-basis: 0;
 }
 
@@ -70,15 +70,15 @@ section {
 	float: left;
 	margin-top: 10px;
 	background-color: #3dedd5;
-	height: 800px;
+	height: 700px;
 	padding: 10px;
 }
 
 .img-holder {
 	width: 50%;
-	height: 400px;
-	float: left;
-	margin: 10px 20px 10px 10px;
+	height: 500px;
+	float: right;
+	margin: 10px 10px 10px 20px;
 }
 
 section p {
@@ -127,13 +127,21 @@ section p {
 	100% {margin-left: -300%;}
 }
 
+.puestos {
+	width: 75%;
+}
+
+.puestos li {
+	margin: 0 0 5px 0;
+}
+
 /*           ASIDE        */
 aside {
 	width: 25%;
 	float: right;
 	margin-top: 10px;
 	background-color: #3dedd5;
-	height: 800px;
+	height: 700px;
 }
 
 .link-box {
@@ -143,4 +151,21 @@ aside {
 	height: 40px;
 	padding-left: 10px;
 	padding-top: 10px;
+}
+
+/*           FOOTER             */
+.clear-block {
+	clear: both;
+}
+
+footer {
+	width: 100%;
+	height: 30px;
+	padding: 5px;
+	margin-top: 10px;
+	border-top: 2px solid #2cd6c0;
+	background-color: #3dedd5;
+	color: gray;
+	text-align: right;
+	clear: both;
 }

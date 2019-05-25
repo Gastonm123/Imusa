@@ -5,7 +5,7 @@ if(!$_POST) {
 	die("Error, ningun formulario fue enviado");
 }
 
-$con = new mysqli("localhost", "gaston", "1234", "imusa");
+$con = new mysqli("localhost", "gaston", "", "imusa");
 
 if($con->error) {
 	die ("Conexion abortada\n");

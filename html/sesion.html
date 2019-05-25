@@ -3,63 +3,72 @@
     <head>
         <meta charset="UTF-8">
         <title>IMuSA Sitio Web</title>
-        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto"> 
         <link rel="stylesheet" href="../css/document.css">
         <link rel="stylesheet" href="../css/header.css">
         <link rel="stylesheet" href="../css/nav.css">
         <link rel="stylesheet" href="../css/sesion.css">
         <script type="text/javascript" src="../lib/jquery-3.3.1.min.js"></script>
-        <!-- <script src="../js/sesion.js"></script> -->
     </head>
-    <body onload="configure()">
+    <body>
         <header>
-            <table><tr>
-                <td id="nombre-pagina">
-                    Instituto Municipal de Salud Animal.
-                </td>
-                <td id="imagen">
-                    <img src="../logo.png"> 
-                </td>
-                <td id="costado-imagen">
-                    IMuSA
-                </td>
-            </tr></table>
+            <div id="nombre-pagina">
+                Instituto Municipal de Salud Animal
+            </div>
+            <div id="space"></div>
+            <div id="imagen">
+                <img src="logo.png"> 
+            </div>
+            <div id="costado-imagen">
+                IMuSA
+            </div>
         </header>
-        
-        <div id="distance-header-nav"></div>
+    
         <nav>
-            <table><tr>
-                <td id="inicio">
-                    <a href="../index.html">INICIO</a>
-                </td>
-                <td id="contacto">
-                    <a href="#">CONTACTO</a>
-                </td>
-                <td id="adopcion">
-                    <a href="#">ADOPCION</a>
-                </td>
-                <td id="sesion">
-                    <a href="./sesion.html">[sesion]</a>
-                </td>
-            </tr></table>
+            <div id="inicio" class="center-item">
+                <a href="../index.html">INICIO</a>
+            </div>
+            <div id="contacto" class="center-item">
+                <a href="#">CONTACTO</a>
+            </div>
+            <div id="adopcion" class="center-item">
+                <a href="#">ADOPCION</a>
+            </div>
+            <div id="sesion" class="center-item">
+                <a href="./sesion.html">[sesion]</a>
+            </div>
         </nav>
 
-        <div id="distance-nav-article"></div>
-        <article><div class="container">
-            <h2>Inicio de sesion</h2>
-            <form action="../sesion.php" method="POST">
+        <article>
+            <div class="container">
+                <h2>Inicio de sesion</h2>
+
                 <div class="input-box">Usuario: <input id="user" type="text" name="user"> </div>
                 <div class="input-box">Password: <input id="pass" type="password" name="pass"> </div>
-                <!-- <div class="input-box">Acceso: 
-                    <input type="radio" name="acceso" value="admin"> Admin
-                    <input type="radio" name="acceso" value="voluntario"> Voluntario
-                    <input type="radio" name="acceso" value="visitante"> Visitante
-                </div> -->
                 <div id="submit-box">
-                    <span id=registrarse><input type="button" value="Registrarse"></span>
-                    <input id="submit" type="submit" value="Ingresar">
+                    <button id="registroB">Registrarse</button>
+                    <button id="sesionB">Sesion</button>
                 </div>
-            </form>
-        </div></article>
+            </div>
+        </article>
+
+        <script>
+            $("#registroB").click(function() {
+                location.href = "./registrarse.html"
+            });
+            $("#sesionB").click(function() {
+                var user = $('#user').val();
+                var pass = $('#pass').val();
+
+                $.post(
+                    '../sesion.php',
+                    {user: user, pass: pass},
+                    function(data, status, jqXHR){
+                        console.log('Request status: ' + status);
+                        alert(data);
+                    }
+                )
+            });
+        </script>
     </body>
 </html>
