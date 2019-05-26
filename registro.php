@@ -1,18 +1,20 @@
 <?php
 
 /* establecer la conexion y checkear que se haya enviado un formulario */
+
 if(!$_POST) {
 	echo "Error, ningun formulario";
-	exit();
+	exit;
 }
 
-$con = new mysqli("localhost", "gaston", "1234", "imusa");
+mysqli_report(MYSQLI_REPORT_STRICT);
 
-if($con->error) {
-	echo "Error de conexion";
-	exit();
+try {
+    $con = new mysqli("localhost", "gaston", "1234", "imusa");
+} catch (Exception $e) {
+	echo 'Error de conexion';
+    exit;
 }
-
 
 
 /* checkear si el mail y/o el usuario estan pickeados */
@@ -21,15 +23,15 @@ $USER = $_POST["username"];
 
 $query = $con->query("SELECT email, username FROM usuarios WHERE email='$MAIL' AND username='$USER'");
 
-if($con->error) {
-	echo "Error de conexion";
-	exit();
+if(!$query) {
+	echo "Error en la query";
+	exit;
 }
 
 if($query->num_rows) {
 	#redirigir
 	echo "Usuario ya pickeado";
-	exit();
+	exit;
 }
 
 
@@ -45,11 +47,9 @@ $NACIONALIDAD = $_POST["nacionalidad"];
 $query = "INSERT INTO usuarios (email, username, password, name, surname, dni, birthday, nationality)
 		VALUES ('$MAIL', '$USER', SHA1('$PASSWORD'), '$NOMBRE', '$APELLIDO', '$DNI', '$NACIMIENTO', '$NACIONALIDAD')";
 
-$con->query($query);
-
-if($con->error) {
-	echo "Error de conexion";
-	exit();
+if(!$con->query($query)) {
+	echo "Error en la query";
+	exit;
 }
 
 echo "Usuario registrado";
@@ -60,13 +60,15 @@ echo "Usuario registrado";
 $DESCRIPCION = $_POST["descripcion"];
 
 if($DESCRIPCION){
-	$con->query("UPDATE usuarios SET description=$DESCRIPCION WHERE username='$USER'");
+	$query = "UPDATE usuarios SET description=$DESCRIPCION WHERE username='$USER'";
 
-	if($con->error){
-		echo "Error de conexion";
-		exit();
+	if(!$con->query($query)) {
+		echo "Error en la query";
+		exit;
 	}
 }
 #redirigir
+
+$con->close()
 
 ?>

@@ -1,34 +1,41 @@
 <?php
 
 /* establecer la conexion y checkear que se haya enviado un formulario */
+
 if(!$_POST) {
-	die("Error, ningun formulario fue enviado");
+    echo "Error, ningun formulario fue enviado";
+    exit;
 }
 
-$con = new mysqli("localhost", "gaston", "", "imusa");
+mysqli_report(MYSQLI_REPORT_STRICT);
 
-if($con->error) {
-	die ("Conexion abortada\n");
+try {
+    $con = new mysqli("localhost", "gaston", "1234", "imusa");
+} catch (Exception $e) {
+    echo 'Error de conexion';
+    exit;
 }
 
 
+/* checkear que exista la combinacion de usuario y contrasenia */
 $USER = $_POST['user'];
 $PASS = $_POST['pass'];
 
-$query = "SELECT * FROM usuarios WHERE username=$USER AND password=SHA1($PASS)";
+$query = "SELECT * FROM usuarios WHERE username='$USER' AND password=SHA1('$PASS')";
 
 $ans = $con->query($query);
 
-if($con->error){
+if(!$ans){
     die($con->error);
 }
 
 if($ans->num_rows){
     #setear usuario en el servidor
-    #redirigir
-    die('Sesion Iniciada');
+    echo 'Sesion Iniciada';
 } else {
-    die('Password o usuario incorrectas');
+    echo 'Password o usuario incorrectas';
 }
+
+$con->close()
 
 ?>
