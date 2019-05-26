@@ -1,13 +1,13 @@
 #container-registro{
-    background-color: aquamarine;
-    border-color: coral;
+    background-color: #ffeeee;
+    border-color: #007cca;
     border-width: 2px;
     border-style: solid;
     border-radius: 10%;
     margin-top: 15px;
     width: 600px;
     height: 560px;
-    color: #ee6f41;
+    color: black;
 }
 
 #container-registro h3{

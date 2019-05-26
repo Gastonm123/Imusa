@@ -8,7 +8,8 @@
 }
 
 nav {
-    background-color: aquamarine;
+	/*inicio contacto*/
+    background-color: #ffb080;
     width: 100%;
     height: 10%; 
 	display: flex;
@@ -22,8 +23,9 @@ nav {
 nav div {
     text-align: center;
     border-style: solid;
-    border-width: 3px;
-    border-color: coral;
+	border-width: 2px;
+	/*borde inicio contacto*/
+    border-color: #000000;
     font-size: 15px;
 }
 
@@ -35,9 +37,9 @@ a {
 /*           HEADER        */
 header {
     width: 100%;
-    height: 100px;
-    background-color: blue;
-	color: orange;
+	height: 100px;
+    background-color: #007cca;
+	color: white;
 	display: flex;
 	align-items: center;
 }
@@ -60,7 +62,7 @@ header {
 
 #costado-imagen{
 	flex-grow: 0.5;
-    font-size: 25px;
+    font-size: 50px;
 	flex-basis: 0;
 }
 
@@ -69,7 +71,7 @@ section {
 	width: 74%;
 	float: left;
 	margin-top: 10px;
-	background-color: #3dedd5;
+	background-color: #ffeeee;
 	height: 700px;
 	padding: 10px;
 }
@@ -140,7 +142,7 @@ aside {
 	width: 25%;
 	float: right;
 	margin-top: 10px;
-	background-color: #3dedd5;
+	background-color: #ffeeee;
 	height: 700px;
 }
 
@@ -163,9 +165,9 @@ footer {
 	height: 30px;
 	padding: 5px;
 	margin-top: 10px;
-	border-top: 2px solid #2cd6c0;
-	background-color: #3dedd5;
-	color: gray;
+	border-top: 2px solid #005d98;
+	background-color: #6e6e6e;
+	color: white;
 	text-align: right;
 	clear: both;
 }
