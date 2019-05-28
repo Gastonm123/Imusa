@@ -3,21 +3,22 @@
     border-color: #007cca;
     border-width: 2px;
     border-style: solid;
-    border-radius: 10%;
+    border-radius: 10px;
     margin-top: 15px;
     width: 600px;
-    height: 560px;
+    height: auto;
     color: black;
+    display: flex;
+    flex-flow: column;
 }
 
 #container-registro h3{
-    position:relative; 
-    left:46%;
+    text-align: center;
 }
 
-#container-registro p, 
-#container-registro form{
+#container-registro p {
     padding-left: 10px;
+    margin-top: 0;
 }
 
 #container-registro input{
@@ -25,22 +26,7 @@
 }
 
 #submit-box {
-    height: 100px;
-    width: 580px;
-}
-
-#submit-box textarea{
-    width: 250px;
-    height: 60px;
-    resize: none;
-    position: relative;
-    border-radius: 5%;
-    left: 10px;
-}
-
-#submit-box input{
-    position: relative;
-    left: 40%;
-    top: 18px;
-    background-color: #999;
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
 }

@@ -56,8 +56,10 @@ header {
 }
 
 #imagen {
-	flex-grow: 0.5;
+	flex-grow: 0.3;
 	flex-basis: 0;
+	padding-left: 10px;
+	padding-top: 3px;
 }
 
 #costado-imagen{

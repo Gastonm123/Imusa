@@ -26,7 +26,8 @@ $query = "SELECT * FROM usuarios WHERE username='$USER' AND password=SHA1('$PASS
 $ans = $con->query($query);
 
 if(!$ans){
-    die($con->error);
+    echo "Error en la query";
+    exit;
 }
 
 if($ans->num_rows){
