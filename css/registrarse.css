@@ -1,8 +1,6 @@
 #container-registro{
     background-color: #ffeeee;
-    border-color: #007cca;
-    border-width: 2px;
-    border-style: solid;
+    border: 2px solid #007cca;
     border-radius: 10px;
     margin-top: 15px;
     width: 600px;

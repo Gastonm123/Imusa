@@ -76,6 +76,7 @@ section {
 	background-color: #ffeeee;
 	height: 700px;
 	padding: 10px;
+	border-radius: 10px;
 }
 
 .img-holder {
@@ -146,6 +147,7 @@ aside {
 	margin-top: 10px;
 	background-color: #ffeeee;
 	height: 700px;
+	border-radius: 10px;
 }
 
 .link-box {

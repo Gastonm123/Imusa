@@ -29,7 +29,6 @@ if(!$query) {
 }
 
 if($query->num_rows) {
-	#redirigir
 	echo "Usuario ya pickeado";
 	exit;
 }
@@ -67,7 +66,6 @@ if($DESCRIPCION){
 		exit;
 	}
 }
-#redirigir
 
 $con->close()
 
