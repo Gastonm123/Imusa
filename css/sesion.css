@@ -1,17 +1,13 @@
 article {
     width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
 }
 
 .container {
     background-color: #ffeeee;
-    border-color: #007cca;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 10%;
-    margin-top: 20px;
-    position: relative;
-    left: 35%;
-    width: 30%;
+    width: 350px;
 }
 
 .input-box,
@@ -19,6 +15,10 @@ article div h2 {
     position: relative;
     left: 10px;
     padding: 3px;
+}
+
+.w3-input {
+    height: 28px
 }
 
 #submit-box {

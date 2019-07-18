@@ -1,73 +1,65 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>IMuSA Sitio Web</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto"> 
-        <link rel="stylesheet" href="../css/document.css">
-        <link rel="stylesheet" href="../css/nav.css">
-        <link rel="stylesheet" href="../css/sesion.css">
-        <script type="text/javascript" src="../lib/jquery-3.3.1.min.js"></script>
-    </head>
-    <body>
-        <header>
-            <div id="imagen">
-                <img src="../logo.png"> 
-            </div>
-            <div id="nombre-pagina">
-                Instituto Municipal de Salud Animal
-            </div>
-            <div id="space"></div>
-            <div id="costado-imagen">
-                IMuSA
-            </div>
-        </header>
-    
-        <nav>
-            <div id="inicio" class="center-item">
-                <a href="../index.html">INICIO</a>
-            </div>
-            <div id="contacto" class="center-item">
-                <a href="#">CONTACTO</a>
-            </div>
-            <div id="adopcion" class="center-item">
-                <a href="#">ADOPCION</a>
-            </div>
-            <div id="sesion" class="center-item">
-                <a href="./sesion.html">[sesion]</a>
-            </div>
-        </nav>
 
-        <article>
-            <div class="container">
-                <h2>Inicio de sesion</h2>
+<head>
+    <meta charset="UTF-8">
+    <title>IMuSA Sitio Web</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="../css/w3.css">
+    <link rel="stylesheet" href="../css/document.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/sesion.css">
+    <script type="text/javascript" src="../lib/jquery-3.3.1.min.js"></script>
+    <script src="../js/sesion.js"></script>
+</head>
 
-                <div class="input-box">Usuario: <input id="user" type="text" name="user"> </div>
-                <div class="input-box">Password: <input id="pass" type="password" name="pass"> </div>
-                <div id="submit-box">
-                    <button id="registroB">Registrarse</button>
-                    <button id="sesionB">Sesion</button>
+<body class="w3-blue"> 
+    <header class="w3-padding-small w3-section w3-row header-container w3-cyan w3-text-white">
+        <div class="w3-row" style="width:10%">
+            <img src="../img/logo.jpeg" style="width:100px">
+        </div>
+        <div class="w3-row" style="width:20%">
+            Instituto Municipal de Salud Animal
+        </div>
+        <div class="w3-row" style="width:50%"></div>
+        <div class="w3-row w3-xlarge w3-right-align" style="width:20%">
+            IMuSA
+        </div>
+    </header>
+
+    <nav id="navbar" class="w3-container w3-row" style="padding:0px">
+        <button onclick="location.href='../index.html'"
+            class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter" id="inicio" class="center-item">
+            INICIO
+        </button>
+        <button onclick="location.href='tratamiento.html'" class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter" id="contacto" class="center-item">
+            TRATAMIENTO
+        </button>
+        <button onclick="location.href='adopcion.html'" class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter" id="adopcion" class="center-item">
+            ADOPCION
+        </button>
+        <button class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter"
+            id="sesion" class="center-item">
+            SESION
+        </button>
+    </nav>
+
+    <article>
+        <div class="w3-card-4 w3-white container">
+            <div class="w3-green w3-container">
+                <h4 style="margin-left: 15px">Inicio de sesion</h4>
+            </div>
+
+            <div class="w3-padding-small">
+                Usuario: <br> <input id="user" class="w3-input w3-border" type="text" name="user">
+                Password: <br> <input id="pass" class="w3-input w3-border" type="password" name="pass">
+                <div id="submit-box" style="float:left">
+                    <button class="w3-btn w3-teal" id="registroB">Registrarse</button>
+                    <button class="w3-btn w3-teal" id="sesionB">Sesion</button>
                 </div>
             </div>
-        </article>
+        </div>
+    </article>
+</body>
 
-        <script>
-            $("#registroB").click(function() {
-                location.href = "./registrarse.html"
-            });
-            $("#sesionB").click(function() {
-                var user = $('#user').val();
-                var pass = $('#pass').val();
-
-                $.post(
-                    '../sesion.php',
-                    {user: user, pass: pass},
-                    function(data, status, jqXHR){
-                        console.log('Request status: ' + status);
-                        alert(data);
-                    }
-                )
-            });
-        </script>
-    </body>
 </html>

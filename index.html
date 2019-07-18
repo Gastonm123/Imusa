@@ -7,8 +7,9 @@
 		<link rel="stylesheet" href="css/w3.css">
         <link rel="stylesheet" href="css/document.css">
         <link rel="stylesheet" href="css/header.css">
-		<link rel="stylesheet" href="css/nav.css">
-		<script type="text/javascript" src="./jquery-3.3.1.min.js"></script>
+        <link rel="stylesheet" href="css/nav.css">
+		<script type="text/javascript" src="lib/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="js/sticky_nav.js"></script>
     </head>
     <body class="w3-blue">
         <header class="w3-padding-small w3-section w3-row header-container w3-cyan w3-text-white">
@@ -24,14 +25,14 @@
                 </div>
         </header>
         
-        <nav class="w3-container w3-row" style="padding:0px">
+        <nav id="navbar" class="w3-container w3-row" style="padding:0px">
                 <button class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter" class="center-item">
                     INICIO
                 </button>
                 <button onclick="location.href='html/tratamiento.html'" class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter" class="center-item">
                     TRATAMIENTO
                 </button>
-                <button class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter" class="center-item">
+                <button onclick="location.href='html/adopcion.html'" class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter" class="center-item">
                     ADOPCION
                 </button>
                 <button onclick="location.href='html/sesion.html'" class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter">
@@ -41,20 +42,20 @@
 
         <div class="w3-container index-content">
             <section class="w3-row-padding w3-pale-yellow" style="width: 75% !important">
-                <div class="img-holder">
-                    <div class="slider">
+                <div class="img-holder" style="height:60%; display:flex; align-items:center">
+                    <div class="slider" style="height:80%">
                         <ul>
                             <li>
-                                <img src="./img/img07" alt="">
+                                <img src="./img/img07" alt="" class="w3-image">
                             </li>
                             <li>
-                                <img src="./img/img08" alt="">
+                                <img src="./img/img08" alt="" class="w3-image">
                             </li>
                             <li>
-                                <img src="./img/img10" alt="">
+                                <img src="./img/img10" alt="" class="w3-image">
                             </li>
                             <li>
-                                <img src="./img/img01" alt="">
+                                <img src="./img/img01" alt="" class="w3-image">
                             </li>
                         </ul>
                     </div>

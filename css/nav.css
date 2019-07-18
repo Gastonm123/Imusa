@@ -16,6 +16,16 @@ nav {
 	margin: 0 4px 10px 4px;
 }
 
+.sticky {
+	position: fixed;
+	top: 0;
+	height: auto;
+}
+
+.sticky + .index-content {
+	padding-top: 60px !important;
+}
+
 .center-item {
 	flex-grow: 1;
 }
