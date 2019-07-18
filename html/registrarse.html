@@ -47,24 +47,32 @@
         </button>
     </nav>
 
-    <article id="container-registro">
-        <h3>Registro</h3>
-        <p>Complete los siguientes campos para concretar el registro</p>
+    <article class="w3-margin w3-card-4 w3-white" style="width:50%">
+        <div class="w3-container w3-green">
+            <h3>Registro</h3>
+        </div>
 
-        <p>Nombre: <input type="text" name="nombre" required> </p>
-        <p>Apellido: <input type="text" name="apellido" required> </p>
-        <p>Email: <input type="email" name="mail" required> </p>
-        <p>Username: <input type="text" name="username" required> </p>
-        <p>Password: <input type="password" name="password" required> </p>
-        <p>Repita password: <input type="password" id="confirm" required> </p>
-        <p>Fecha nacimiento: <input type="date" name="nacimiento" required> </p>
-        <p>Nacionalidad: <input type="text" name="nacionalidad" required> </p>
-        <p>D.N.I.: <input id="dni" type="number" name="dni"> </p>
-        <p>A continuacion ponga una descripcion opcional de su persona: </p>
-        <textarea name="descripcion" style="max-width: 50%;
-             max-height: 60px; resize: none; margin-left: 10px"></textarea>
-        <div id="submit-box">
-            <button id="finalizar">Finalizar</button>
+        <div class="w3-container w3-padding">
+            <h4>Complete los siguientes campos para concretar el registro</h4>
+
+            Nombre: <br> <input class="w3-input" type="text" name="nombre" required>
+            Apellido: <br> <input class="w3-input" type="text" name="apellido" required>
+            Email: <br> <input class="w3-input" type="email" name="mail" required>
+            Username: <br> <input class="w3-input" type="text" name="username" required>
+            Password: <br> <input class="w3-input" type="password" name="password" required>
+            Repita password: <br> <input class="w3-input" type="password" id="confirm" required>
+            Fecha nacimiento: <br> <input class="w3-input" type="date" name="nacimiento" required>
+            Nacionalidad: <br> <input class="w3-input" type="text" name="nacionalidad" required>
+            D.N.I.: <br> <input id="dni" class="w3-input" type="number" name="dni">
+            A continuacion puede incluir una descripcion adicional:
+            <textarea name="descripcion" style="width:100%;
+                height: 100px; resize: none; margin: 4px 0"
+                class="w3-input w3-border w3-round">
+            </textarea>
+
+            <div class="w3-container w3-padding" style="display:flex; justify-content: center">
+                <button id="finalizar" class="w3-btn w3-teal">Finalizar</button>
+            </div>
         </div>
     </article>
 </body>
