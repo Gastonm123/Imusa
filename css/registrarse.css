@@ -32,3 +32,7 @@
 .w3-input{
     margin-bottom: 5px;
 }
+
+.invalid-input {
+    border-bottom-color: #ffdddd!important
+}

@@ -10,18 +10,25 @@ $(function () {
         var dni = $("input[name=dni]");
         var descripcion = $("textarea[name=descripcion]");
 
-        var temp = [nombre, apellido, mail, username, password, nacimiento, dni, nacionalidad];
+        var temp = [mail, username, password];
         var band = true;
+        var classes = 'w3-border-left w3-border-red w3-pale-red invalid-input'
         temp.map(function (el, _, _) {
             if (el.val() == '') {
-                el.css('border', '2px solid red');
+                el.addClass(classes)
+                el.click({this: el}, function(event){
+                    event.data.this.removeClass(classes)
+                })
                 band = false;
             }
-        })
+        }) 
 
         var confirm = $("#confirm")
         if (confirm.val() != password.val()) {
-            confirm.css('border', '2px solid red')
+            confirm.addClass(classes)
+            confirm.click({this: confirm}, function(event){
+                event.data.this.removeClass(classes)
+            })
             band = false;
         }
 
@@ -31,9 +38,9 @@ $(function () {
             return {
                 nombre: nombre.val(),
                 apellido: apellido.val(),
-                mail: mail.val(),
-                username: username.val(),
+                email: mail.val(),
                 password: password.val(),
+                usuario: username.val(),
                 nacimiento: nacimiento.val(),
                 nacionalidad: nacionalidad.val(),
                 dni: dni.val(),
@@ -46,9 +53,7 @@ $(function () {
         var input = checkInput();
 
         if (input) {
-            $.post(
-                '../registro.php',
-                input,
+            $.post('../php/registrarse.php', input,
                 function (data, status, xhr) {
                     console.log('Request status: ' + status);
                     alert(data);
