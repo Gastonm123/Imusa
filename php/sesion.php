@@ -142,7 +142,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	<?php else : ?>
 		<script>
 			function cerrar_cuenta() {
-				$.get('./sesion.php', {commands: 'close'})
+				$.get('./sesion.php', {
+					commands: 'close'
+				})
 				location.href = './sesion.php'
 			}
 		</script>
@@ -152,28 +154,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				<div class="w3-padding" style="width: 100%; height:auto; display:flex; justify-content:center">
 					<img src="../img/usuario.png" style="width: 100px; height: 100px">
 				</div>
-				<a href="#" class="w3-bar-item w3-button">
+				
+				<div class='w3-bar-item w3-margin-top w3-margin-bottom'>
+					<b>Mi cuenta</b> <br>
+					¡Hola <?php echo $_COOKIE['user'] ?>!
+				</div>
+
+				<a href="#" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 					<i class="fa fa-home icon"></i>HOME
 				</a>
-				<a href="#" class="w3-bar-item w3-button">
+				<a href="#" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 					<i class="fa fa-search icon"></i>SEARCH
 				</a>
-				<a href="#" class="w3-bar-item w3-button">
+				<a href="#" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 					<i class="fa fa-envelope icon"></i>ENVELOPE
 				</a>
-				<a href="#" class="w3-bar-item w3-button">
+				<a href="#" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 					<i class="fa fa-globe icon"></i>WEB
 				</a>
-				<button onclick='cerrar_cuenta()' class="w3-bar-item w3-button">
-					<i class="fa fa-envelope icon"></i>CERRAR SESION
+				<button onclick='cerrar_cuenta()' class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
+					<i class="fa fa-sign-out icon"></i>CERRAR SESION
 				</button>
 			</div>
-			<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: 100%; padding-left: 350px !important; text-align:justify">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum volutpat ultricies velit a consequat. Curabitur varius turpis sit amet bibendum fringilla. Sed imperdiet enim vel vulputate scelerisque. Curabitur cursus quam vel consectetur feugiat. Mauris id porttitor felis. Sed eu lectus et nisl lacinia pulvinar. Integer mattis neque dolor, eget dignissim dolor vehicula at. Mauris fermentum eu turpis nec eleifend. Sed ut ullamcorper libero, a molestie nunc. Maecenas dolor eros, malesuada vel tristique vitae, consectetur eget mauris.
+			<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: 100%; padding-left: 310px !important; text-align:justify">
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum volutpat ultricies velit a consequat. Curabitur varius turpis sit amet bibendum fringilla. Sed imperdiet enim vel vulputate scelerisque. Curabitur cursus quam vel consectetur feugiat. Mauris id porttitor felis. Sed eu lectus et nisl lacinia pulvinar. Integer mattis neque dolor, eget dignissim dolor vehicula at. Mauris fermentum eu turpis nec eleifend. Sed ut ullamcorper libero, a molestie nunc. Maecenas dolor eros, malesuada vel tristique vitae, consectetur eget mauris.</p>
 
-				Maecenas a laoreet velit. Aliquam ultrices fringilla tortor maximus iaculis. Nunc eu dui luctus, consectetur risus nec, pulvinar nisl. Vivamus vulputate dolor bibendum sapien viverra bibendum. Vivamus varius nisl tortor, lacinia dictum orci scelerisque in. Vestibulum pretium scelerisque quam, vel maximus purus. Praesent auctor nisi non risus imperdiet, non pharetra risus ullamcorper. Fusce maximus id lorem vitae tincidunt. Nunc tempor tempus dapibus. Nullam pellentesque turpis eget odio hendrerit gravida. Morbi egestas risus magna, non lacinia turpis accumsan blandit. Ut commodo, diam nec auctor dapibus, erat odio volutpat orci, efficitur interdum neque mauris lobortis turpis. Phasellus porttitor elit et leo scelerisque vulputate. Vivamus sollicitudin, nisi id ultricies dapibus, justo lorem commodo nibh, non viverra lacus urna quis erat.
+				<p>Maecenas a laoreet velit. Aliquam ultrices fringilla tortor maximus iaculis. Nunc eu dui luctus, consectetur risus nec, pulvinar nisl. Vivamus vulputate dolor bibendum sapien viverra bibendum. Vivamus varius nisl tortor, lacinia dictum orci scelerisque in. Vestibulum pretium scelerisque quam, vel maximus purus. Praesent auctor nisi non risus imperdiet, non pharetra risus ullamcorper. Fusce maximus id lorem vitae tincidunt. Nunc tempor tempus dapibus. Nullam pellentesque turpis eget odio hendrerit gravida. Morbi egestas risus magna, non lacinia turpis accumsan blandit. Ut commodo, diam nec auctor dapibus, erat odio volutpat orci, efficitur interdum neque mauris lobortis turpis. Phasellus porttitor elit et leo scelerisque vulputate. Vivamus sollicitudin, nisi id ultricies dapibus, justo lorem commodo nibh, non viverra lacus urna quis erat.</p>
 
-				Phasellus a libero nisl. Nullam quis felis et arcu blandit commodo. Etiam semper malesuada erat, quis finibus lorem pretium id. Vivamus felis tellus, vehicula ac nunc dapibus, placerat accumsan nisi. Duis eu arcu felis. Pellentesque elit neque, varius ut placerat a, finibus a tortor. Etiam est odio, aliquet eget scelerisque id, lacinia eu dolor. Vivamus porttitor elit vitae lorem commodo pellentesque.
+				<p>Phasellus a libero nisl. Nullam quis felis et arcu blandit commodo. Etiam semper malesuada erat, quis finibus lorem pretium id. Vivamus felis tellus, vehicula ac nunc dapibus, placerat accumsan nisi. Duis eu arcu felis. Pellentesque elit neque, varius ut placerat a, finibus a tortor. Etiam est odio, aliquet eget scelerisque id, lacinia eu dolor. Vivamus porttitor elit vitae lorem commodo pellentesque.</p>
+
+				<p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam erat volutpat. Morbi mollis sem nibh, a facilisis enim pharetra tristique. Ut nec bibendum ex. Nam faucibus malesuada tellus, vel tempor diam. Donec cursus ipsum id erat rutrum, sit amet malesuada metus consectetur. Praesent tempor, nisl vel efficitur euismod, arcu ante aliquam mauris, eu vestibulum nibh justo a leo. Etiam semper urna vel lectus congue pulvinar. Donec vitae tempus neque, nec egestas leo. Mauris luctus ipsum id nisi efficitur iaculis. Praesent egestas ultrices est ac condimentum. Aliquam molestie neque rhoncus mauris ultricies, et vestibulum felis facilisis. Nam malesuada mauris tincidunt, placerat lorem vel, eleifend enim. Curabitur lacus tellus, interdum in nisi non, vulputate bibendum mi. Nunc pretium leo mattis, gravida tortor eu, maximus nibh.</p>
+
+				<p>Praesent at leo sit amet dolor sagittis mattis. Cras blandit dictum sem, quis mattis ligula lacinia sit amet. Aenean aliquet cursus fermentum. Donec porta enim sit amet felis ullamcorper volutpat. Donec tristique mi eget enim sollicitudin tempus. Aliquam sollicitudin purus vitae tortor ullamcorper, et posuere enim auctor. Nunc at felis tempus, mattis justo non, efficitur nisl. Pellentesque vitae pellentesque sapien. Quisque neque purus, rhoncus a volutpat eu, euismod id leo.</p>
 			</div>
 		</div>
 	<?php endif; ?>
