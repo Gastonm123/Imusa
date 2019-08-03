@@ -1,139 +1,150 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>IMuSA Sitio Web</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto"> 
-		<link rel="stylesheet" href="css/w3.css">
-        <link rel="stylesheet" href="css/document.css">
-        <link rel="stylesheet" href="css/nav.css">
-		<script type="text/javascript" src="lib/jquery-3.3.1.min.js"></script>
-        <script type="text/javascript" src="js/sticky_nav.js"></script>
-    </head>
-    <body class="w3-blue">
-        <header class="w3-padding-small w3-section w3-row header-container w3-cyan w3-text-white">
-				<div class="w3-row" style="width:10%">
-					<img src="img/logo.jpeg" style="width:100px"> 
-				</div>
-                <div class="w3-row" style="width:20%">
-                    Instituto Municipal de Salud Animal
-                </div>
-                <div class="w3-row" style="width:50%"></div>
-                <div class="w3-row w3-xlarge w3-right-align" style="width:20%">
-                    IMuSA
-                </div>
-        </header>
-        
-        <nav id="navbar" class="w3-container w3-row" style="padding:0px">
-                <button class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter" class="center-item">
-                    INICIO
-                </button>
-                <button onclick="location.href='html/tratamiento.html'" class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter" class="center-item">
-                    TRATAMIENTO
-                </button>
-                <button onclick="location.href='html/adopcion.html'" class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter" class="center-item">
-                    ADOPCION
-                </button>
-                <button onclick="location.href='html/sesion.html'" class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter">
-                    SESION
-                </button>
-        </nav>
 
-        <div class="w3-container index-content">
-            <section class="w3-row-padding w3-pale-yellow" style="width: 75% !important">
-                <div class="img-holder" style="height:60%; display:flex; align-items:center">
-                    <div class="slider" style="height:80%">
-                        <ul>
-                            <li>
-                                <img src="./img/img07" alt="" class="w3-image">
-                            </li>
-                            <li>
-                                <img src="./img/img08" alt="" class="w3-image">
-                            </li>
-                            <li>
-                                <img src="./img/img10" alt="" class="w3-image">
-                            </li>
-                            <li>
-                                <img src="./img/img01" alt="" class="w3-image">
-                            </li>
-                        </ul>
-                    </div>
+<head>
+    <meta charset="UTF-8">
+    <title>IMuSA Sitio Web</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="css/w3.css">
+    <link rel="stylesheet" href="css/document.css">
+    <link rel="stylesheet" href="css/nav.css">
+    <script type="text/javascript" src="lib/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/sticky_nav.js"></script>
+</head>
+
+<body class="w3-blue">
+    <header class="w3-padding-small w3-section w3-row header-container w3-cyan w3-text-white">
+        <div class="w3-row" style="width:10%; min-width:100px">
+            <img src="../img/logo.jpeg" style="width:100px">
+        </div>
+        <div class="w3-row" style="width:20%; margin-left: 20px">
+            Instituto Municipal de Salud Animal
+        </div>
+        <div class="w3-row" style="width:50%"></div>
+        <div class="w3-row w3-xlarge w3-right-align" style="width:20%">
+            IMuSA
+        </div>
+    </header>
+
+    <nav id="navbar" class="w3-container w3-row" style="padding:0px">
+        <button class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter" class="center-item">
+            INICIO
+        </button>
+        <button onclick="location.href='html/tratamiento.html'"
+            class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter" class="center-item">
+            TRATAMIENTO
+        </button>
+        <button onclick="location.href='html/adopcion.html'"
+            class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter" class="center-item">
+            ADOPCION
+        </button>
+        <button onclick="location.href='php/sesion.php'"
+            class="nav-item w3-btn w3-orange w3-hover-deep-orange w3-quarter">
+            SESION
+        </button>
+    </nav>
+
+    <div class="w3-container index-content">
+        <section class="w3-row-padding w3-pale-yellow" style="width: 75% !important">
+            <div class="img-holder" style="height:60%; display:flex; align-items:center">
+                <div class="slider" style="height:80%">
+                    <ul>
+                        <li>
+                            <img src="./img/img07" alt="" class="w3-image">
+                        </li>
+                        <li>
+                            <img src="./img/img08" alt="" class="w3-image">
+                        </li>
+                        <li>
+                            <img src="./img/img10" alt="" class="w3-image">
+                        </li>
+                        <li>
+                            <img src="./img/img01" alt="" class="w3-image">
+                        </li>
+                    </ul>
                 </div>
-                <p style="margin-top: 30px">
-                    <i>Bienvenido!</i> Esta es el sitio web del Instituto Municipal de Salud Animal (IMuSA).
-                </p>
-        
-                <p>
-                    El IMuSA atiende al publico en forma gratuita en su sede y en sus otros lugares de atencion, dando
-                    servicios de esterilizacion quirurgica, vacunaciones, tratamientos antisarnicos y parasitarios; y
-                    promoviendo la adopcion responsable
-                </p>
-        
-                <p>
-                    El objetivo de este sitio web es nutrir de informacion sobre la adopcion a los interesados e informacion
-                    sobre los servicios de esterilizacion, vacunacion y desparasitacion a los vecinos o interesados en llevar
-                    a sus mascotas.
-                </p>
-        
-                <p style="margin-top: 30px">
-                    Algunos de los perros que esperan una adopcion y otros que ya han sido adoptados se muestran
-                    en las imagenes. Si te interesa saber mas, sobre como adoptar un imusita podes ir a la seccion
-                    de adopcion o acercarte a cualquiera de los puestos de atencion.
-                </p>
-        
-                <p>
-                    Ademas de los puntos fijos de adopcion podes encotrar quirofanos moviles que van mudandose durante
-                    el año para realizarle una esterilizacion o tratamiento a tu perro. Podes encotrar la agenda de moviles
-                    <a href="https://www.rosario.gob.ar/web/servicios/salud-animal/
+            </div>
+            <p style="margin-top: 30px">
+                <i>Bienvenido!</i> Esta es el sitio web del Instituto Municipal de Salud Animal (IMuSA).
+            </p>
+
+            <p>
+                El IMuSA atiende al publico en forma gratuita en su sede y en sus otros lugares de atencion, dando
+                servicios de esterilizacion quirurgica, vacunaciones, tratamientos antisarnicos y parasitarios; y
+                promoviendo la adopcion responsable
+            </p>
+
+            <p>
+                El objetivo de este sitio web es nutrir de informacion sobre la adopcion a los interesados e informacion
+                sobre los servicios de esterilizacion, vacunacion y desparasitacion a los vecinos o interesados en
+                llevar
+                a sus mascotas.
+            </p>
+
+            <p style="margin-top: 30px">
+                Algunos de los perros que esperan una adopcion y otros que ya han sido adoptados se muestran
+                en las imagenes. Si te interesa saber mas, sobre como adoptar un imusita podes ir a la seccion
+                de adopcion o acercarte a cualquiera de los puestos de atencion.
+            </p>
+
+            <p>
+                Ademas de los puntos fijos de adopcion podes encotrar quirofanos moviles que van mudandose durante
+                el año para realizarle una esterilizacion o tratamiento a tu perro. Podes encotrar la agenda de moviles
+                <a href="https://www.rosario.gob.ar/web/servicios/salud-animal/
         				esterilizacion-de-perros-y-gatos#agenda" style="text-decoration: normal;
         				color: blue">aqui</a>.
-                </p>
-        
-                <p style="margin-top: 40px;">
-                    Los puestos fijos del IMuSA son los siguientes:
-                </p>
-                <ul class="puestos">
-                    <li>
-                        Distrito Centro: Sede IMuSA, Av. Francia 1940, lunes a viernes de 8 a 14hs. Puede
-                        solicitar un turno, telefonicamente al 4805463 o de manera
-                        <a href="https://www.rosario.gob.ar/web/servicios/salud-animal/
+            </p>
+
+            <p style="margin-top: 40px;">
+                Los puestos fijos del IMuSA son los siguientes:
+            </p>
+            <ul class="puestos">
+                <li>
+                    Distrito Centro: Sede IMuSA, Av. Francia 1940, lunes a viernes de 8 a 14hs. Puede
+                    solicitar un turno, telefonicamente al 4805463 o de manera
+                    <a href="https://www.rosario.gob.ar/web/servicios/salud-animal/
         						esterilizacion-de-perros-y-gatos#turnos" style="text-decoration: normal;
         						color: blue">online</a>.
-                    </li>
-                    <li>
-                        Distrito Noroeste: Vecinal 7 de Septiembre, Ayala Gauna 7951, lunes a viernes 8 a 12hs.
-                    </li>
-                    <li>
-                        Distrito Sudoeste: Vecinal Parque Sur, Pje. Bologna 5350, lunes a viernes de 8 a 12hs.
-                    </li>
-                    <li>
-                        Distrito Norte: La Ceramica, Calfucura 1790, lunes a viernes de 8 a 12hs.
-                    </li>
-                </ul>
-            </section>
-            
-            <aside class="w3-row-padding w3-pale-yellow" style="width: 24% !important">
-                <div class="link-box" style="font-size: 20px; display: flex; align-items: center; justify-content: center">
-                    CONTACTANOS
-                </div>
-                <button onclick="location.href='https://www.facebook.com/municipalidadrosario'" id="link-facebook" class="link-box w3-btn" style="background-color:#3b57a7">
-                    Facebook
-                </button>
-                <button onclick="location.href='https://twitter.com/MuniRosario'" id="link-twitter" class="link-box w3-btn" style="background-color:#1da1f2">
-                    Twitter
-                </button>
-                <button onclick="location.href='https://bit.ly/insta_munirosario'" id="link-instagram" class="link-box w3-btn" style="background-color:#d847ac">
-                    Instagram
-                </button>
-                <button onclick="location.href='http://www.youtube.com/Munirosario'" id="link-youtube" class="link-box w3-btn" style="background-color: #27d367">
-                    Whatsapp
-                </button>
-            </aside>
-        </div>
+                </li>
+                <li>
+                    Distrito Noroeste: Vecinal 7 de Septiembre, Ayala Gauna 7951, lunes a viernes 8 a 12hs.
+                </li>
+                <li>
+                    Distrito Sudoeste: Vecinal Parque Sur, Pje. Bologna 5350, lunes a viernes de 8 a 12hs.
+                </li>
+                <li>
+                    Distrito Norte: La Ceramica, Calfucura 1790, lunes a viernes de 8 a 12hs.
+                </li>
+            </ul>
+        </section>
 
-		<footer class="w3-gray w3-border-dark-gray w3-border-top" style="border-width: 2px !important">
-			<div style="float:left">Para mas informacion revisa nuestras redes. </div>
-			<div style="float:right"><i>Todos los derechos reservados.</i></div>
-		</footer>
-    </body>
+        <aside class="w3-row-padding w3-pale-yellow" style="width: 24% !important">
+            <div class="link-box" style="font-size: 20px; display: flex; align-items: center; justify-content: center">
+                CONTACTANOS
+            </div>
+            <button onclick="location.href='https://www.facebook.com/municipalidadrosario'" id="link-facebook"
+                class="link-box w3-btn" style="background-color:#3b57a7">
+                Facebook
+            </button>
+            <button onclick="location.href='https://twitter.com/MuniRosario'" id="link-twitter" class="link-box w3-btn"
+                style="background-color:#1da1f2">
+                Twitter
+            </button>
+            <button onclick="location.href='https://bit.ly/insta_munirosario'" id="link-instagram"
+                class="link-box w3-btn" style="background-color:#d847ac">
+                Instagram
+            </button>
+            <button onclick="location.href='http://www.youtube.com/Munirosario'" id="link-youtube"
+                class="link-box w3-btn" style="background-color: #27d367">
+                Whatsapp
+            </button>
+        </aside>
+    </div>
+
+    <footer class="w3-gray w3-border-dark-gray w3-border-top" style="border-width: 2px !important">
+        <div style="float:left">Para mas informacion revisa nuestras redes. </div>
+        <div style="float:right"><i>Todos los derechos reservados.</i></div>
+    </footer>
+</body>
+
 </html>

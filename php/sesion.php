@@ -3,16 +3,15 @@
 $user = $password = '';
 $GLOBALS['errores'] = [];
 
-if (empty($_SESSION)) {
-	function format_input($data)
-	{
-		$data = trim($data);
-		$data = stripslashes($data);
-		$data = htmlspecialchars($data);
-		return $data;
-	}
+function format_input($data)
+{
+	$data = trim($data);
+	$data = stripslashes($data);
+	$data = htmlspecialchars($data);
+	return $data;
+}
 
-
+if (!isset($_COOKIE['user'])) {
 	if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 		if (empty($_POST['user'])) {
 			array_push($GLOBALS['errores'], 'User or email is required');
@@ -39,13 +38,22 @@ if (empty($_SESSION)) {
 			$GLOBALS['userType'] = $userType;
 
 			if (validar_data($data)) {
-				session_start();
-				$_SESSION['user'] = $user;
-				$_SESSION['password'] = $password;
+				setcookie('user', $user, time() + (10 * 365 * 24 * 60 * 60), '/');
 			}
 		}
 	}
 }
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+	if (!empty($_GET['commands'])) {
+		switch ($_GET['commands']) {
+			case 'close':
+				setcookie('user', '', time() - 3600, '/');
+				die;
+		}
+	}
+}
+
 ?>
 
 <!-- generar la pagina distinto dependiendo de que se haya creado una sesion o no -->
@@ -61,6 +69,7 @@ if (empty($_SESSION)) {
 	<link rel="stylesheet" href="../css/document.css">
 	<link rel="stylesheet" href="../css/nav.css">
 	<link rel="stylesheet" href="../css/sesion.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script type="text/javascript" src="../lib/jquery-3.3.1.min.js"></script>
 	<script src="../js/sesion.js"></script>
 	<script src='../js/sticky_nav.js'></script>
@@ -68,10 +77,10 @@ if (empty($_SESSION)) {
 
 <body class="w3-blue">
 	<header class="w3-padding-small w3-section w3-row header-container w3-cyan w3-text-white">
-		<div class="w3-row" style="width:10%">
+		<div class="w3-row" style="width:10%; min-width:100px">
 			<img src="../img/logo.jpeg" style="width:100px">
 		</div>
-		<div class="w3-row" style="width:20%">
+		<div class="w3-row" style="width:20%; margin-left: 20px">
 			Instituto Municipal de Salud Animal
 		</div>
 		<div class="w3-row" style="width:50%"></div>
@@ -95,7 +104,7 @@ if (empty($_SESSION)) {
 		</button>
 	</nav>
 
-	<?php if (empty($_SESSION)) : ?>
+	<?php if (!isset($_COOKIE['user'])) : ?>
 		<?php
 		$result = '';
 
@@ -131,8 +140,41 @@ if (empty($_SESSION)) {
 			</div>
 		</article>
 	<?php else : ?>
-		<div class="w3-card w3-white">
-			Bienvenido <?php echo $_SESSION['user'] ?> with password <?php echo $_SESSION['password'] ?>
+		<script>
+			function cerrar_cuenta() {
+				$.get('./sesion.php', {commands: 'close'})
+				location.href = './sesion.php'
+			}
+		</script>
+
+		<div class="w3-container index-content" style="height: 800px">
+			<div class="w3-bar-block w3-green w3-round" style="width:300px; height:100%; float:left;">
+				<div class="w3-padding" style="width: 100%; height:auto; display:flex; justify-content:center">
+					<img src="../img/usuario.png" style="width: 100px; height: 100px">
+				</div>
+				<a href="#" class="w3-bar-item w3-button">
+					<i class="fa fa-home icon"></i>HOME
+				</a>
+				<a href="#" class="w3-bar-item w3-button">
+					<i class="fa fa-search icon"></i>SEARCH
+				</a>
+				<a href="#" class="w3-bar-item w3-button">
+					<i class="fa fa-envelope icon"></i>ENVELOPE
+				</a>
+				<a href="#" class="w3-bar-item w3-button">
+					<i class="fa fa-globe icon"></i>WEB
+				</a>
+				<button onclick='cerrar_cuenta()' class="w3-bar-item w3-button">
+					<i class="fa fa-envelope icon"></i>CERRAR SESION
+				</button>
+			</div>
+			<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: 100%; padding-left: 350px !important; text-align:justify">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum volutpat ultricies velit a consequat. Curabitur varius turpis sit amet bibendum fringilla. Sed imperdiet enim vel vulputate scelerisque. Curabitur cursus quam vel consectetur feugiat. Mauris id porttitor felis. Sed eu lectus et nisl lacinia pulvinar. Integer mattis neque dolor, eget dignissim dolor vehicula at. Mauris fermentum eu turpis nec eleifend. Sed ut ullamcorper libero, a molestie nunc. Maecenas dolor eros, malesuada vel tristique vitae, consectetur eget mauris.
+
+				Maecenas a laoreet velit. Aliquam ultrices fringilla tortor maximus iaculis. Nunc eu dui luctus, consectetur risus nec, pulvinar nisl. Vivamus vulputate dolor bibendum sapien viverra bibendum. Vivamus varius nisl tortor, lacinia dictum orci scelerisque in. Vestibulum pretium scelerisque quam, vel maximus purus. Praesent auctor nisi non risus imperdiet, non pharetra risus ullamcorper. Fusce maximus id lorem vitae tincidunt. Nunc tempor tempus dapibus. Nullam pellentesque turpis eget odio hendrerit gravida. Morbi egestas risus magna, non lacinia turpis accumsan blandit. Ut commodo, diam nec auctor dapibus, erat odio volutpat orci, efficitur interdum neque mauris lobortis turpis. Phasellus porttitor elit et leo scelerisque vulputate. Vivamus sollicitudin, nisi id ultricies dapibus, justo lorem commodo nibh, non viverra lacus urna quis erat.
+
+				Phasellus a libero nisl. Nullam quis felis et arcu blandit commodo. Etiam semper malesuada erat, quis finibus lorem pretium id. Vivamus felis tellus, vehicula ac nunc dapibus, placerat accumsan nisi. Duis eu arcu felis. Pellentesque elit neque, varius ut placerat a, finibus a tortor. Etiam est odio, aliquet eget scelerisque id, lacinia eu dolor. Vivamus porttitor elit vitae lorem commodo pellentesque.
+			</div>
 		</div>
 	<?php endif; ?>
 </body>

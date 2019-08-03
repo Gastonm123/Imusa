@@ -37,4 +37,10 @@ if ($conn->query($sql) !== TRUE) {
 	die('Error creating the table');
 }
 
+$sql = "INSERT INTO users (email, password, usuario) VALUES ('admin', 'admin', 'admin')";
+
+if ($conn->query($sql) !== TRUE) {
+	die('Error creando el usuario admin');
+}
+
 $conn->close();

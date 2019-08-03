@@ -17,6 +17,12 @@ article div h2 {
     padding: 3px;
 }
 
+.icon {
+    width: 15px;
+    height: 15px;
+    margin-right: 4px;
+}
+
 .w3-input {
     height: 28px
 }
