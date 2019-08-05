@@ -39,6 +39,11 @@ if (!isset($_COOKIE['user'])) {
 
 			if (validar_data($data)) {
 				setcookie('user', $user, time() + (10 * 365 * 24 * 60 * 60), '/');
+				die('
+				<script>
+					location.href = "./sesion.php"
+				</script>
+				');
 			}
 		}
 	}
@@ -142,10 +147,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	<?php else : ?>
 		<script>
 			function cerrar_cuenta() {
-				$.get('./sesion.php', {
+				var data = {
 					commands: 'close'
+				}
+
+				$.get('./sesion.php', data, function(a,b,c) {
+					location.href = './sesion.php'
 				})
-				location.href = './sesion.php'
 			}
 		</script>
 
