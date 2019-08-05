@@ -39,7 +39,18 @@ if (!isset($_COOKIE['user'])) {
 
 			if (validar_data($data)) {
 				setcookie('user', $user, time() + (10 * 365 * 24 * 60 * 60), '/');
+				die;
 			}
+		}
+
+		if (!empty($GLOBALS['errores'])) {
+			$result = '';
+
+			foreach ($GLOBALS['errores'] as $error) {
+				$result .= $error . '\n';
+			}
+
+			setcookie('errores', $result, time() + 20);
 		}
 	}
 }
@@ -48,8 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	if (!empty($_GET['commands'])) {
 		switch ($_GET['commands']) {
 			case 'close':
-				setcookie('user', '', time() - 3600, '/');
-				die;
+			setcookie('user', '', time() - 3600, '/');
+			die;
 		}
 	}
 }
@@ -105,51 +116,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	</nav>
 
 	<?php if (!isset($_COOKIE['user'])) : ?>
-		<?php
-		$result = '';
-
-		foreach ($GLOBALS['errores'] as $error) {
-			$result .= $error . '\n';
-		}
-
-		if (!empty($result)) {
-			echo '<script>
-					alert(\'' . $result . '\')
-				</script>';
-		}
-		?>
-
+		
 		<article>
 			<div class="w3-card-4 w3-white container">
 				<div class="w3-green w3-container">
 					<h4 style="margin-left: 15px">Inicio de sesion</h4>
 				</div>
 
-				<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="w3-padding-small" id='form1'>
+				<script>
+					function mandar_form(){
+						var data = {
+							user: $('#user').val(),
+							password: $('#pass').val()
+						}
+
+						$("#waiting-spinner").css('display', 'inline-block');
+						$("#sesion-text").css('display', 'none');
+						$("#waiting-spinner").addClass('w3-spin');
+						$.post('./sesion.php', data,function(a,b,c) {
+							location.href = './sesion.php'
+						})
+					}
+				</script>
+				<div class="w3-padding-small">
 
 					Usuario:
 					<input id="user" class="w3-input w3-border" type="text" name="user" value=<?php echo $user ?>>
 					Password:
 					<input id="pass" class="w3-input w3-border" type="password" name="password" value=<?php echo $password ?>>
 
-				</form>
+				</div>
 				<div id="submit-box" style="float:left">
 					<button class="w3-btn w3-teal" onclick="location.href= '../html/registrarse.html'">Registrarse</button>
-					<button class="w3-btn w3-teal" form='form1' type='submit'>Sesion</button>
+					<button class="w3-btn w3-teal" onclick="mandar_form()" style="width:78px">
+						<span id="sesion-text"> Sesion </span> 
+						<i class="fa fa-spinner" style="display:none" id="waiting-spinner"></i>
+					</button>
 				</div>
 			</div>
 		</article>
+
+		<?php if (isset($_COOKIE['errores'])) : ?>
+			<script>
+				alert('<?php echo $_COOKIE['errores'] ?>');
+			</script>
+		<?php endif; ?>
 	<?php else : ?>
 		<script>
 			function cerrar_cuenta() {
-				$.get('./sesion.php', {
+				var data = {
 					commands: 'close'
+				}
+
+				$.get('./sesion.php', data, function(a,b,c) {
+					location.href = './sesion.php'
 				})
-				location.href = './sesion.php'
 			}
 		</script>
 
-		<div class="w3-container index-content" style="height: 800px">
+		<div class="w3-container index-content" style="height: 500px">
 			<div class="w3-bar-block w3-green w3-round" style="width:300px; height:100%; float:left;">
 				<div class="w3-padding" style="width: 100%; height:auto; display:flex; justify-content:center">
 					<img src="../img/usuario.png" style="width: 100px; height: 100px">
@@ -177,15 +202,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				</button>
 			</div>
 			<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: 100%; padding-left: 310px !important; text-align:justify">
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum volutpat ultricies velit a consequat. Curabitur varius turpis sit amet bibendum fringilla. Sed imperdiet enim vel vulputate scelerisque. Curabitur cursus quam vel consectetur feugiat. Mauris id porttitor felis. Sed eu lectus et nisl lacinia pulvinar. Integer mattis neque dolor, eget dignissim dolor vehicula at. Mauris fermentum eu turpis nec eleifend. Sed ut ullamcorper libero, a molestie nunc. Maecenas dolor eros, malesuada vel tristique vitae, consectetur eget mauris.</p>
+				<div style="overflow-y:auto; height:100%">
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum volutpat ultricies velit a consequat. Curabitur varius turpis sit amet bibendum fringilla. Sed imperdiet enim vel vulputate scelerisque. Curabitur cursus quam vel consectetur feugiat. Mauris id porttitor felis. Sed eu lectus et nisl lacinia pulvinar. Integer mattis neque dolor, eget dignissim dolor vehicula at. Mauris fermentum eu turpis nec eleifend. Sed ut ullamcorper libero, a molestie nunc. Maecenas dolor eros, malesuada vel tristique vitae, consectetur eget mauris.</p>
 
-				<p>Maecenas a laoreet velit. Aliquam ultrices fringilla tortor maximus iaculis. Nunc eu dui luctus, consectetur risus nec, pulvinar nisl. Vivamus vulputate dolor bibendum sapien viverra bibendum. Vivamus varius nisl tortor, lacinia dictum orci scelerisque in. Vestibulum pretium scelerisque quam, vel maximus purus. Praesent auctor nisi non risus imperdiet, non pharetra risus ullamcorper. Fusce maximus id lorem vitae tincidunt. Nunc tempor tempus dapibus. Nullam pellentesque turpis eget odio hendrerit gravida. Morbi egestas risus magna, non lacinia turpis accumsan blandit. Ut commodo, diam nec auctor dapibus, erat odio volutpat orci, efficitur interdum neque mauris lobortis turpis. Phasellus porttitor elit et leo scelerisque vulputate. Vivamus sollicitudin, nisi id ultricies dapibus, justo lorem commodo nibh, non viverra lacus urna quis erat.</p>
+					<p>Maecenas a laoreet velit. Aliquam ultrices fringilla tortor maximus iaculis. Nunc eu dui luctus, consectetur risus nec, pulvinar nisl. Vivamus vulputate dolor bibendum sapien viverra bibendum. Vivamus varius nisl tortor, lacinia dictum orci scelerisque in. Vestibulum pretium scelerisque quam, vel maximus purus. Praesent auctor nisi non risus imperdiet, non pharetra risus ullamcorper. Fusce maximus id lorem vitae tincidunt. Nunc tempor tempus dapibus. Nullam pellentesque turpis eget odio hendrerit gravida. Morbi egestas risus magna, non lacinia turpis accumsan blandit. Ut commodo, diam nec auctor dapibus, erat odio volutpat orci, efficitur interdum neque mauris lobortis turpis. Phasellus porttitor elit et leo scelerisque vulputate. Vivamus sollicitudin, nisi id ultricies dapibus, justo lorem commodo nibh, non viverra lacus urna quis erat.</p>
 
-				<p>Phasellus a libero nisl. Nullam quis felis et arcu blandit commodo. Etiam semper malesuada erat, quis finibus lorem pretium id. Vivamus felis tellus, vehicula ac nunc dapibus, placerat accumsan nisi. Duis eu arcu felis. Pellentesque elit neque, varius ut placerat a, finibus a tortor. Etiam est odio, aliquet eget scelerisque id, lacinia eu dolor. Vivamus porttitor elit vitae lorem commodo pellentesque.</p>
+					<p>Phasellus a libero nisl. Nullam quis felis et arcu blandit commodo. Etiam semper malesuada erat, quis finibus lorem pretium id. Vivamus felis tellus, vehicula ac nunc dapibus, placerat accumsan nisi. Duis eu arcu felis. Pellentesque elit neque, varius ut placerat a, finibus a tortor. Etiam est odio, aliquet eget scelerisque id, lacinia eu dolor. Vivamus porttitor elit vitae lorem commodo pellentesque.</p>
 
-				<p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam erat volutpat. Morbi mollis sem nibh, a facilisis enim pharetra tristique. Ut nec bibendum ex. Nam faucibus malesuada tellus, vel tempor diam. Donec cursus ipsum id erat rutrum, sit amet malesuada metus consectetur. Praesent tempor, nisl vel efficitur euismod, arcu ante aliquam mauris, eu vestibulum nibh justo a leo. Etiam semper urna vel lectus congue pulvinar. Donec vitae tempus neque, nec egestas leo. Mauris luctus ipsum id nisi efficitur iaculis. Praesent egestas ultrices est ac condimentum. Aliquam molestie neque rhoncus mauris ultricies, et vestibulum felis facilisis. Nam malesuada mauris tincidunt, placerat lorem vel, eleifend enim. Curabitur lacus tellus, interdum in nisi non, vulputate bibendum mi. Nunc pretium leo mattis, gravida tortor eu, maximus nibh.</p>
+					<p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam erat volutpat. Morbi mollis sem nibh, a facilisis enim pharetra tristique. Ut nec bibendum ex. Nam faucibus malesuada tellus, vel tempor diam. Donec cursus ipsum id erat rutrum, sit amet malesuada metus consectetur. Praesent tempor, nisl vel efficitur euismod, arcu ante aliquam mauris, eu vestibulum nibh justo a leo. Etiam semper urna vel lectus congue pulvinar. Donec vitae tempus neque, nec egestas leo. Mauris luctus ipsum id nisi efficitur iaculis. Praesent egestas ultrices est ac condimentum. Aliquam molestie neque rhoncus mauris ultricies, et vestibulum felis facilisis. Nam malesuada mauris tincidunt, placerat lorem vel, eleifend enim. Curabitur lacus tellus, interdum in nisi non, vulputate bibendum mi. Nunc pretium leo mattis, gravida tortor eu, maximus nibh.</p>
 
-				<p>Praesent at leo sit amet dolor sagittis mattis. Cras blandit dictum sem, quis mattis ligula lacinia sit amet. Aenean aliquet cursus fermentum. Donec porta enim sit amet felis ullamcorper volutpat. Donec tristique mi eget enim sollicitudin tempus. Aliquam sollicitudin purus vitae tortor ullamcorper, et posuere enim auctor. Nunc at felis tempus, mattis justo non, efficitur nisl. Pellentesque vitae pellentesque sapien. Quisque neque purus, rhoncus a volutpat eu, euismod id leo.</p>
+					<p>Praesent at leo sit amet dolor sagittis mattis. Cras blandit dictum sem, quis mattis ligula lacinia sit amet. Aenean aliquet cursus fermentum. Donec porta enim sit amet felis ullamcorper volutpat. Donec tristique mi eget enim sollicitudin tempus. Aliquam sollicitudin purus vitae tortor ullamcorper, et posuere enim auctor. Nunc at felis tempus, mattis justo non, efficitur nisl. Pellentesque vitae pellentesque sapien. Quisque neque purus, rhoncus a volutpat eu, euismod id leo.</p>
+				</div>	
 			</div>
 		</div>
 	<?php endif; ?>
