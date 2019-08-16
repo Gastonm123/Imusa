@@ -1,14 +1,14 @@
 $(function () {
     function checkInput() {
-        var nombre = $("input[name=nombre]");
-        var apellido = $("input[name=apellido]");
+        // var nombre = $("input[name=nombre]");
+        // var apellido = $("input[name=apellido]");
         var mail = $("input[name=mail]");
         var username = $("input[name=username]");
         var password = $("input[name=password]");
-        var nacimiento = $("input[name=nacimiento]");
-        var nacionalidad = $("input[name=nacionalidad]");
-        var dni = $("input[name=dni]");
-        var descripcion = $("textarea[name=descripcion]");
+        // var nacimiento = $("input[name=nacimiento]");
+        // var nacionalidad = $("input[name=nacionalidad]");
+        // var dni = $("input[name=dni]");
+        // var descripcion = $("textarea[name=descripcion]");
 
         var temp = [mail, username, password];
         var band = true;
@@ -36,15 +36,15 @@ $(function () {
             return false
         else {
             return {
-                nombre: nombre.val(),
-                apellido: apellido.val(),
+                // nombre: nombre.val(),
+                // apellido: apellido.val(),
                 email: mail.val(),
                 password: password.val(),
                 usuario: username.val(),
-                nacimiento: nacimiento.val(),
-                nacionalidad: nacionalidad.val(),
-                dni: dni.val(),
-                descripcion: descripcion.val()
+                // nacimiento: nacimiento.val(),
+                // nacionalidad: nacionalidad.val(),
+                // dni: dni.val(),
+                // descripcion: descripcion.val()
             }
         }
     }
