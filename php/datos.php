@@ -1,6 +1,6 @@
 <?php
 $servername = 'localhost';
-$username = 'gaston';
-$password = '1451glmc';
-$db = 'imusa';
+$username = 'poli_uno';
+$password = 'poli1';
+$db = 'poli_siete';
 ?>

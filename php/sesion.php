@@ -141,9 +141,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				<div class="w3-padding-small">
 
 					Usuario:
-					<input id="user" class="w3-input w3-border" type="text" name="user" value=<?php echo $user ?>>
+					<input id="user" class="w3-input w3-border" type="text">
 					Password:
-					<input id="pass" class="w3-input w3-border" type="password" name="password" value=<?php echo $password ?>>
+					<input id="pass" class="w3-input w3-border" type="password">
 
 				</div>
 				<div id="submit-box" style="float:left">
@@ -157,6 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		</article>
 
 		<?php if (isset($_COOKIE['errores'])) : ?>
+			<?php setcookie('errores', '', time()-3600) ?>
 			<script>
 				alert('<?php echo $_COOKIE['errores'] ?>');
 			</script>
