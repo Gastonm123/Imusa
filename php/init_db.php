@@ -1,6 +1,8 @@
 <?php
 
-$conn = new mysqli('localhost', 'poli_siete', 'poli7', 'poli_siete');
+include 'datos.php';
+
+$conn = new mysqli($servername, $username, $password, $db);
 
 if ($conn->connect_error) {
 	echo "Error ingresando a la base de datos";

@@ -15,7 +15,6 @@ if ($conn->connect_error) {
     echo 'esto si anda';
 }
 
-var_dump($conn);
 $response = $conn->query("SELECT * FROM users");
 
-echo ($response === FALSE);
+var_dump($response);
