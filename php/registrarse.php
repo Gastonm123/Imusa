@@ -33,8 +33,11 @@ $keys = rtrim($keys, ',');
 $values = rtrim($values, ',');
 
 $sql = 'INSERT INTO users (' . $keys . ') VALUES (' . $values . ')';
-if ($conn->query($sql) !== TRUE) {
-	die('Error en la data provista');
+$response = $conn->query($sql);
+if ($response !== TRUE) {
+	var_dump($response);
+	echo '\n';
+	die($sql);
 }
 
 echo 'Data ingresada con exito';

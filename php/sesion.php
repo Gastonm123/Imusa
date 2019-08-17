@@ -11,6 +11,19 @@ function format_input($data)
 	return $data;
 }
 
+function get_username($user) 
+{
+	include 'datos.php';
+	$conn = new mysqli($servername, $username, $password, $db);
+	$sql = "SELECT username FROM users WHERE email='" . $user . "'";
+	if ($result = $conn->query($sql)) {
+		return $result->fetch_row()[0];
+	} else {
+		array_push($GLOBALS['errores'], 'Error obteniendo el nombre de usuario');
+		return false;
+	}
+}
+
 if (!isset($_COOKIE['user'])) {
 	if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 		if (empty($_POST['user'])) {
@@ -38,8 +51,14 @@ if (!isset($_COOKIE['user'])) {
 			$GLOBALS['userType'] = $userType;
 
 			if (validar_data($data)) {
-				setcookie('user', $user, time() + (10 * 365 * 24 * 60 * 60), '/');
-				die;
+				if ($GLOBALS['userType'] == 'email') {
+					$user = get_username($user);
+				}
+
+				if ($user) {
+					setcookie('user', $user, time() + (10 * 365 * 24 * 60 * 60), '/');
+					die;
+				}
 			}
 		}
 
@@ -84,6 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	<script type="text/javascript" src="../lib/jquery-3.3.1.min.js"></script>
 	<script src="../js/sesion.js"></script>
 	<script src='../js/sticky_nav.js'></script>
+	<link rel="shortcut icon" href="../img/logo.ico"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body class="w3-blue">

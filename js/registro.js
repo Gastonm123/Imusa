@@ -40,7 +40,7 @@ $(function () {
                 // apellido: apellido.val(),
                 email: mail.val(),
                 password: password.val(),
-                usuario: username.val(),
+                username: username.val(),
                 // nacimiento: nacimiento.val(),
                 // nacionalidad: nacionalidad.val(),
                 // dni: dni.val(),
