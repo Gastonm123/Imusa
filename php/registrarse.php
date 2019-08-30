@@ -38,7 +38,35 @@ if ($response !== TRUE) {
 	var_dump($response);
 	echo '\n';
 	die($sql);
+} else {
+	echo 'Data ingresada con exito a users';
 }
 
-echo 'Data ingresada con exito';
+$sql = 'SELECT LAST_INSERT_ID()';
+
+if ($result = $conn->query($sql)) {
+	$user_id = $result->fetch_row()[0];
+} else {
+	echo 'Error ingresando a la tabla users_info';
+	die;
+}
+
+$sql = 'INSERT INTO users_info (uid) VALUES (\'' . $user_id . '\')';
+
+if ($conn->query($sql)) {
+	echo 'Data ingresada con exito a users_info';
+} else {
+	echo 'Error ingresando a la tabla users_info';
+	die;
+}
+
+$sql = 'INSERT INTO permissions (uid, rol) VALUES (\'' . $user_id . '\', \'user\')';
+
+if ($conn->query($sql)) {
+	echo 'Rol configurado con exito';
+} else {
+	echo 'Error creando rol para el usuario';
+	die;
+}
+
 $conn->close();

@@ -20,7 +20,7 @@ article div h2 {
 .icon {
     width: 15px;
     height: 15px;
-    margin-right: 4px;
+    margin-right: 6px;
 }
 
 .w3-input {
@@ -46,4 +46,8 @@ article div h2 {
 
 #registrarse input{
     background-color: #999;
+}
+
+.account:hover {
+    cursor: pointer;
 }

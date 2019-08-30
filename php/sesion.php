@@ -24,6 +24,31 @@ function get_username($user)
 	}
 }
 
+function get_user_id($user) 
+{
+	include 'datos.php';
+	$conn = new mysqli($servername, $username, $password, $db);
+	$sql = 'SELECT id FROM users WHERE username=\'' . $user . '\'';
+	if ($result = $conn->query($sql)) {
+		return $result->fetch_row()[0];
+	} else {
+		return false;
+	}
+}
+
+function get_user_permission($user)
+{
+	include 'datos.php';
+	$conn = new mysqli($servername, $username, $password, $db);
+	$uid = get_user_id($user);
+	$sql = 'SELECT rol FROM permissions WHERE uid=\'' . $uid . '\'';
+	if ($result = $conn->query($sql)) {
+		return $result->fetch_row()[0];
+	} else {
+		return false;
+	}
+}
+
 if (!isset($_COOKIE['user'])) {
 	if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 		if (empty($_POST['user'])) {
@@ -86,6 +111,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 ?>
 
+<!-- TODO agregar validacion desde el servidor para la contraseña -->
+
 <!-- generar la pagina distinto dependiendo de que se haya creado una sesion o no -->
 
 <!DOCTYPE html>
@@ -104,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	<script src="../js/sesion.js"></script>
 	<script src='../js/sticky_nav.js'></script>
 	<link rel="shortcut icon" href="../img/logo.ico"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 </head>
 
 <body class="w3-blue">
@@ -196,9 +223,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			}
 		</script>
 
-		<div class="w3-container index-content" style="height: 500px">
-			<div class="w3-bar-block w3-green w3-round" style="width:300px; height:100%; float:left;">
-				<div class="w3-padding" style="width: 100%; height:auto; display:flex; justify-content:center">
+		<div class="w3-container index-content" style="display: flex; height: auto">
+			<div class="w3-bar-block w3-green w3-round" style="width:300px; height:auto; float:left;">
+				<div class="w3-padding" style="width: auto; height:auto; display:flex; justify-content:center">
 					<img src="../img/usuario.png" style="width: 100px; height: 100px">
 				</div>
 				
@@ -207,15 +234,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					¡Hola <?php echo $_COOKIE['user'] ?>!
 				</div>
 
-				<a href="#" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
+				<a href="./sesion.php" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 					<i class="fa fa-home icon"></i>HOME
 				</a>
-				<a href="#" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
-					<i class="fa fa-search icon"></i>SEARCH
+				<a href="./sesion.php?view=user" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
+					<i class="fa fa-user icon"></i>USER
 				</a>
 				<a href="#" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 					<i class="fa fa-envelope icon"></i>ENVELOPE
 				</a>
+				<?php if (get_user_permission($_COOKIE['user']) == 'admin') : ?>
+					<a href='./sesion.php?view=accounts' class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
+						<i class="fa fa-users icon"></i>ACCOUNTS
+					</a>
+				<?php endif; ?>
 				<a href="#" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 					<i class="fa fa-globe icon"></i>WEB
 				</a>
@@ -223,19 +255,282 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					<i class="fa fa-sign-out icon"></i>CERRAR SESION
 				</button>
 			</div>
-			<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: 100%; padding-left: 310px !important; text-align:justify">
-				<div style="overflow-y:auto; height:100%">
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum volutpat ultricies velit a consequat. Curabitur varius turpis sit amet bibendum fringilla. Sed imperdiet enim vel vulputate scelerisque. Curabitur cursus quam vel consectetur feugiat. Mauris id porttitor felis. Sed eu lectus et nisl lacinia pulvinar. Integer mattis neque dolor, eget dignissim dolor vehicula at. Mauris fermentum eu turpis nec eleifend. Sed ut ullamcorper libero, a molestie nunc. Maecenas dolor eros, malesuada vel tristique vitae, consectetur eget mauris.</p>
 
-					<p>Maecenas a laoreet velit. Aliquam ultrices fringilla tortor maximus iaculis. Nunc eu dui luctus, consectetur risus nec, pulvinar nisl. Vivamus vulputate dolor bibendum sapien viverra bibendum. Vivamus varius nisl tortor, lacinia dictum orci scelerisque in. Vestibulum pretium scelerisque quam, vel maximus purus. Praesent auctor nisi non risus imperdiet, non pharetra risus ullamcorper. Fusce maximus id lorem vitae tincidunt. Nunc tempor tempus dapibus. Nullam pellentesque turpis eget odio hendrerit gravida. Morbi egestas risus magna, non lacinia turpis accumsan blandit. Ut commodo, diam nec auctor dapibus, erat odio volutpat orci, efficitur interdum neque mauris lobortis turpis. Phasellus porttitor elit et leo scelerisque vulputate. Vivamus sollicitudin, nisi id ultricies dapibus, justo lorem commodo nibh, non viverra lacus urna quis erat.</p>
+			<?php if (!isset($_GET['view'])) : ?>
+				<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: auto; text-align:justify">
+					<div style="overflow-y:auto; height: auto">
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum volutpat ultricies velit a consequat. Curabitur varius turpis sit amet bibendum fringilla. Sed imperdiet enim vel vulputate scelerisque. Curabitur cursus quam vel consectetur feugiat. Mauris id porttitor felis. Sed eu lectus et nisl lacinia pulvinar. Integer mattis neque dolor, eget dignissim dolor vehicula at. Mauris fermentum eu turpis nec eleifend. Sed ut ullamcorper libero, a molestie nunc. Maecenas dolor eros, malesuada vel tristique vitae, consectetur eget mauris.</p>
 
-					<p>Phasellus a libero nisl. Nullam quis felis et arcu blandit commodo. Etiam semper malesuada erat, quis finibus lorem pretium id. Vivamus felis tellus, vehicula ac nunc dapibus, placerat accumsan nisi. Duis eu arcu felis. Pellentesque elit neque, varius ut placerat a, finibus a tortor. Etiam est odio, aliquet eget scelerisque id, lacinia eu dolor. Vivamus porttitor elit vitae lorem commodo pellentesque.</p>
+						<p>Maecenas a laoreet velit. Aliquam ultrices fringilla tortor maximus iaculis. Nunc eu dui luctus, consectetur risus nec, pulvinar nisl. Vivamus vulputate dolor bibendum sapien viverra bibendum. Vivamus varius nisl tortor, lacinia dictum orci scelerisque in. Vestibulum pretium scelerisque quam, vel maximus purus. Praesent auctor nisi non risus imperdiet, non pharetra risus ullamcorper. Fusce maximus id lorem vitae tincidunt. Nunc tempor tempus dapibus. Nullam pellentesque turpis eget odio hendrerit gravida. Morbi egestas risus magna, non lacinia turpis accumsan blandit. Ut commodo, diam nec auctor dapibus, erat odio volutpat orci, efficitur interdum neque mauris lobortis turpis. Phasellus porttitor elit et leo scelerisque vulputate. Vivamus sollicitudin, nisi id ultricies dapibus, justo lorem commodo nibh, non viverra lacus urna quis erat.</p>
 
-					<p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam erat volutpat. Morbi mollis sem nibh, a facilisis enim pharetra tristique. Ut nec bibendum ex. Nam faucibus malesuada tellus, vel tempor diam. Donec cursus ipsum id erat rutrum, sit amet malesuada metus consectetur. Praesent tempor, nisl vel efficitur euismod, arcu ante aliquam mauris, eu vestibulum nibh justo a leo. Etiam semper urna vel lectus congue pulvinar. Donec vitae tempus neque, nec egestas leo. Mauris luctus ipsum id nisi efficitur iaculis. Praesent egestas ultrices est ac condimentum. Aliquam molestie neque rhoncus mauris ultricies, et vestibulum felis facilisis. Nam malesuada mauris tincidunt, placerat lorem vel, eleifend enim. Curabitur lacus tellus, interdum in nisi non, vulputate bibendum mi. Nunc pretium leo mattis, gravida tortor eu, maximus nibh.</p>
+						<p>Phasellus a libero nisl. Nullam quis felis et arcu blandit commodo. Etiam semper malesuada erat, quis finibus lorem pretium id. Vivamus felis tellus, vehicula ac nunc dapibus, placerat accumsan nisi. Duis eu arcu felis. Pellentesque elit neque, varius ut placerat a, finibus a tortor. Etiam est odio, aliquet eget scelerisque id, lacinia eu dolor. Vivamus porttitor elit vitae lorem commodo pellentesque.</p>
 
-					<p>Praesent at leo sit amet dolor sagittis mattis. Cras blandit dictum sem, quis mattis ligula lacinia sit amet. Aenean aliquet cursus fermentum. Donec porta enim sit amet felis ullamcorper volutpat. Donec tristique mi eget enim sollicitudin tempus. Aliquam sollicitudin purus vitae tortor ullamcorper, et posuere enim auctor. Nunc at felis tempus, mattis justo non, efficitur nisl. Pellentesque vitae pellentesque sapien. Quisque neque purus, rhoncus a volutpat eu, euismod id leo.</p>
-				</div>	
-			</div>
+						<p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam erat volutpat. Morbi mollis sem nibh, a facilisis enim pharetra tristique. Ut nec bibendum ex. Nam faucibus malesuada tellus, vel tempor diam. Donec cursus ipsum id erat rutrum, sit amet malesuada metus consectetur. Praesent tempor, nisl vel efficitur euismod, arcu ante aliquam mauris, eu vestibulum nibh justo a leo. Etiam semper urna vel lectus congue pulvinar. Donec vitae tempus neque, nec egestas leo. Mauris luctus ipsum id nisi efficitur iaculis. Praesent egestas ultrices est ac condimentum. Aliquam molestie neque rhoncus mauris ultricies, et vestibulum felis facilisis. Nam malesuada mauris tincidunt, placerat lorem vel, eleifend enim. Curabitur lacus tellus, interdum in nisi non, vulputate bibendum mi. Nunc pretium leo mattis, gravida tortor eu, maximus nibh.</p>
+
+						<p>Praesent at leo sit amet dolor sagittis mattis. Cras blandit dictum sem, quis mattis ligula lacinia sit amet. Aenean aliquet cursus fermentum. Donec porta enim sit amet felis ullamcorper volutpat. Donec tristique mi eget enim sollicitudin tempus. Aliquam sollicitudin purus vitae tortor ullamcorper, et posuere enim auctor. Nunc at felis tempus, mattis justo non, efficitur nisl. Pellentesque vitae pellentesque sapien. Quisque neque purus, rhoncus a volutpat eu, euismod id leo.</p>
+					</div>	
+				</div>
+			<?php elseif ($_GET['view'] == 'accounts' && get_user_permission($_COOKIE['user']) == 'admin') : ?>
+				<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: auto; text-align:justify">
+					<div style="display:flex; justify-content:center; margin-bottom:20px">
+						<h2>
+							Usuarios
+						</h2>
+					</div>		
+				
+					<table class="w3-table w3-striped">
+						<?php
+						include 'datos.php';
+						
+						$conn = new mysqli($servername, $username, $password, $db);
+						$sql = 'SELECT id, username, email, rol FROM users 
+						INNER JOIN permissions ON users.id = permissions.uid;';
+						
+						if ($result = $conn->query($sql)) {
+							$cont_column = 0;
+							echo '<tr class="w3-green">';
+							while ($field = $result->fetch_field()) {
+								echo '<th>' . $field->name . '</th>';
+								
+								if ($field->name == 'rol') {
+									$rol_column = $cont_column;
+								} 
+
+								$cont_column++;
+							}
+							echo '</tr>';
+							
+							$cont = 0;
+							while ($row = $result->fetch_row()) {
+								echo '<tr class=\'account\'>';
+								
+								$cont_column = 0;
+								foreach ($row as $data) {
+									if ($cont_column == $rol_column) {
+										echo '
+										<td class="w3-dropdown-click w3-container permissions-dropdown">
+											<span>'.$data.'</span>
+											<div class="w3-dropdown-content w3-bar-block w3-border">
+												<button class="w3-bar-item w3-button" onclick="setear('.$cont.', \'admin\')">admin</button>
+												<button class="w3-bar-item w3-button" onclick="setear('.$cont.', \'user\')">user</button>
+											</div>
+										</td>
+										';
+									} else {
+										echo '<td>' . $data . '</td>';
+									}
+
+									$cont_column++;
+								}
+								
+								echo '</tr>';
+								$cont++;
+							}
+						} else {
+							echo 'No se han podido cargar los datos';
+						}
+						?>
+					</table>
+
+					<button style="float:right; margin-top:50px"
+						class="w3-hide w3-button w3-light-blue guardar-btn"
+						onclick="guardar()">Guardar</button>
+
+					<script>
+						var dropdowns = $(".permissions-dropdown");
+						var cambios = [];
+						// configuramos un onclick para cada cuenta
+						
+						for (let i = 0; i < dropdowns.length; i++) {
+							const dropdown = dropdowns[i];
+							
+							$(dropdown).hover(
+							function() {
+								var content = dropdown.children[1];
+								if (content.className.indexOf("w3-show") == -1) {
+									content.className += " w3-show";
+								}
+							}, function () {
+								var content = dropdown.children[1];
+								if (content.className.indexOf("w3-show") != -1) {
+									content.className = content.className.replace(" w3-show", "");
+								}
+							});
+						}
+						
+						function setear(usuario, permiso) {
+							var accounts = $('.account');
+							var account_id = +accounts[usuario].children[0].innerHTML;
+
+							var posicion_permiso = <?php echo $rol_column ?>
+
+							var tr_permiso = accounts[usuario].children[posicion_permiso];
+
+							tr_permiso.children[0].innerHTML = permiso;
+
+							cambios[account_id] = permiso; 
+
+							//mostrar el boton de guardar
+							var guardar_btn = $(".guardar-btn")[0];
+							if (guardar_btn.className.indexOf('w3-hide') != -1) {
+								guardar_btn.className = guardar_btn.className.replace("w3-hide", "");
+							}
+						}
+
+						function guardar() {
+							cambios.forEach((element, index) => {
+								var data = {
+									'uid': index,
+									'table': 'permissions',
+									'rol': element
+								}
+
+								$.post('update_user_data.php', data, function(a,b,c){
+									console.log("actualizada info del user " + index);
+								})
+							});
+						}
+					</script>
+				</div>
+			<?php else : ?>
+				<?php 
+					if (!isset($servername)) {
+						include 'datos.php';
+					}
+
+					$conn = new mysqli($servername, $username, $password, $db);
+					$cargaOk = 1;
+
+					if ($conn->connect_error) {
+						echo '<script>
+							alert(\'No se ha podido cargar el perfil de usuario\');
+							location.href = \'./sesion.php\'
+						</script>';
+					} else {
+						$user_id = get_user_id($_COOKIE['user']);
+						$sql = 'SELECT * FROM users_info WHERE uid=\'' . $user_id . '\'';
+
+						if ($result = $conn->query($sql)) {
+							$result = $result->fetch_array();
+							$name = $result['name'];
+							$surname = $result['surname'];
+							$birthdate = $result['birthdate'];
+							$nacionality = $result['nacionality'];
+							$description = $result['description'];
+							$arr = [
+								'name' => $name, 
+								'surname' => $surname, 
+								'birthdate' => $birthdate, 
+								'nacionality' => $nacionality, 
+								'description' => $description
+							];
+						} else {
+							echo '<script>
+								alert(\'No se ha podido cargar el perfil de usuario\');
+								location.href = \'./sesion.php\'
+							</script>';
+						}
+					}
+				?>
+
+				<?php if ($_GET['view'] == 'user') : ?>
+
+					<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: auto; text-align:justify">
+						<div style="display:block; margin-bottom:30px">
+							<div class="w3-padding" style="float:right; height:auto; width: auto">
+								<img src="../img/usuario.png" style="width: 100px; height: 100px">
+							</div>
+							<div>
+								<h2>Usuario</h2>
+								<h3 class="w3-margin"> <?php echo $_COOKIE['user'] ?> </h3>
+							</div>
+						</div>
+						<div class="w3-padding">
+							Nombre <br>
+							<?php echo $name ?> <br>
+							Apellido <br>
+							<?php echo $surname ?> <br>
+							Cumpleaños <br>
+							<?php echo $birthdate ?> <br>
+							Nacionalidad <br>
+							<?php echo $nacionality ?> <br>
+							Descripcion <br>
+							<?php echo $description ?> <br>
+						</div>
+						<button class='w3-btn w3-cyan' style='float:right; margin-top:20px'
+							onclick="location.href = './sesion.php?view=user-edit'">Editar</button>
+					</div>
+
+				<?php elseif ($_GET['view'] == 'user-edit') : ?>
+					<script>
+						var previous_values = {};
+
+						<?php foreach ($arr as $key => $value) {
+							if (!empty($value)) {
+								echo 'previous_values[\''.$key.'\'] = \''.$value.'\';';
+							}
+						} ?>
+
+						function mandar_user_data() {
+							var data = {};
+							var user_data = $('.user-data');
+
+							for (let i = 0; i < user_data.length; i++) {
+								let field = user_data[i];
+								if (field.value != previous_values[field.name]) {
+									data[field.name] = field.value;
+								}
+							}
+
+							data['uid'] = <?php echo get_user_id($_COOKIE['user']) ?>;
+							data['table'] = 'users_info';
+							
+							$("#waiting-spinner").css('display', 'inline-block');
+							$("#terminar-text").css('display', 'none');
+							$("#waiting-spinner").addClass('w3-spin');
+							$.post('update_user_data.php', data,
+								function (data, status, xhr) {
+									location.href = './sesion.php?view=user';
+							})
+						}
+					</script>
+					
+					<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: auto; text-align:justify">
+						<div style="display:block; margin-bottom:30px">
+							<div class="w3-padding" style="float:right; height:auto; width: auto">
+								<img src="../img/usuario.png" style="width: 100px; height: 100px">
+							</div>
+							<div>
+								<h2>Usuario</h2>
+								<h3 class='w3-margin'> <?php echo $_COOKIE['user'] ?> </h3>
+							</div>
+						</div>
+						<div class="w3-padding">
+							Nombre <br>
+							<input type="text" class="w3-input user-data" name="name" value="<?php echo $name ?>">
+							Apellido <br>
+							<input type="text" class="w3-input user-data" name="surname" value="<?php echo $surname ?>">
+							Cumpleaños <br>
+							<input type="date" class="w3-input user-data" name="birthdate" value="<?php echo $birthdate ?>">
+							Nacionalidad <br>
+							<input type="text" class="w3-input user-data" name="nacionality" value="<?php echo $nacionality ?>">
+							Descripcion <br>
+							<input type="text" class="w3-input user-data" name="description" value="<?php echo $description ?>">
+							
+							<button onclick="mandar_user_data()" 
+								class="w3-btn w3-cyan" style="float:right; margin-top:20px">
+								<span id="terminar-text"> TERMINAR </span> 
+								<i class="fa fa-spinner" style="display:none" id="waiting-spinner"></i>
+							</button>
+						</div>
+					</div>
+				<?php else : ?>
+					<script>
+						alert('Su pagina no se pudo cargar');
+						location.href = './sesion.php';
+					</script>
+				<?php endif; ?>
+			<?php endif;?>
 		</div>
 	<?php endif; ?>
 </body>
