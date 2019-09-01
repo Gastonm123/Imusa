@@ -47,7 +47,7 @@ $(function () {
         if (input) {
             $.post('../php/registrarse.php', input,
                 function (data, status, xhr) {
-                    location.href = '/php/sesion.php'
+                    location.href = '../php/sesion.php'
                 }
             );
         }
