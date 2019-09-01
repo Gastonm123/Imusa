@@ -163,6 +163,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		</button>
 	</nav>
 
+	<?php if (isset($_COOKIE['flash'])) : ?>
+		<div style="display:flex; justify-content:center">
+			<div class="w3-container w3-border-green w3-round" style="background-color:#c3e6cb; width:350px">
+				<span style="color: #28a745 !important">
+					<?php echo $_COOKIE['flash'] ?>
+				</span>
+			</div>
+		</div>
+
+		<?php setcookie('flash', '', time()-100, '/') ?>
+	<?php endif; ?>
+
 	<?php if (!isset($_COOKIE['user'])) : ?>
 		
 		<article>
@@ -248,8 +260,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 						<i class="fa fa-users icon"></i>ACCOUNTS
 					</a>
 				<?php endif; ?>
-				<a href="#" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
-					<i class="fa fa-globe icon"></i>WEB
+				<a href="./sesion.php?view=pets" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
+					<i class="fa fa-paw icon"></i>MASCOTAS
 				</a>
 				<button onclick='cerrar_cuenta()' class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 					<i class="fa fa-sign-out icon"></i>CERRAR SESION
@@ -270,23 +282,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 						<p>Praesent at leo sit amet dolor sagittis mattis. Cras blandit dictum sem, quis mattis ligula lacinia sit amet. Aenean aliquet cursus fermentum. Donec porta enim sit amet felis ullamcorper volutpat. Donec tristique mi eget enim sollicitudin tempus. Aliquam sollicitudin purus vitae tortor ullamcorper, et posuere enim auctor. Nunc at felis tempus, mattis justo non, efficitur nisl. Pellentesque vitae pellentesque sapien. Quisque neque purus, rhoncus a volutpat eu, euismod id leo.</p>
 					</div>	
 				</div>
-			<?php elseif ($_GET['view'] == 'accounts' && get_user_permission($_COOKIE['user']) == 'admin') : ?>
+			<?php elseif (get_user_permission($_COOKIE['user']) == 'admin' && $_GET['view'] == 'accounts') : ?> 
 				<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: auto; text-align:justify">
 					<div style="display:flex; justify-content:center; margin-bottom:20px">
 						<h2>
-							Usuarios
+							USUARIOS
 						</h2>
 					</div>		
 				
-					<table class="w3-table w3-striped">
+					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0; margin-bottom: 8px">
 						<?php
 						include 'datos.php';
 						
 						$conn = new mysqli($servername, $username, $password, $db);
-						$sql = 'SELECT id, username, email, rol FROM users 
-						INNER JOIN permissions ON users.id = permissions.uid;';
 						
-						if ($result = $conn->query($sql)) {
+						if (empty($_GET['offset'])) {
+							$offset = 0;
+						} else {
+							$offset = $_GET['offset'];
+						}
+
+						$sql = 'SELECT id, username, email, rol FROM users 
+						INNER JOIN permissions ON users.id = permissions.uid
+						LIMIT '.$offset.', '.($offset+10);
+						$result = $conn->query($sql);
+						
+						if (isset($result)) {
 							$cont_column = 0;
 							echo '<tr class="w3-green">';
 							while ($field = $result->fetch_field()) {
@@ -300,41 +321,58 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 							}
 							echo '</tr>';
 							
-							$cont = 0;
-							while ($row = $result->fetch_row()) {
-								echo '<tr class=\'account\'>';
-								
-								$cont_column = 0;
-								foreach ($row as $data) {
-									if ($cont_column == $rol_column) {
-										echo '
-										<td class="w3-dropdown-click w3-container permissions-dropdown">
-											<span>'.$data.'</span>
-											<div class="w3-dropdown-content w3-bar-block w3-border">
-												<button class="w3-bar-item w3-button" onclick="setear('.$cont.', \'admin\')">admin</button>
-												<button class="w3-bar-item w3-button" onclick="setear('.$cont.', \'user\')">user</button>
-											</div>
-										</td>
-										';
-									} else {
-										echo '<td>' . $data . '</td>';
-									}
+							echo '<tbody>';
+							for ($cont=0; $cont < 10; $cont++) { 
+								$row = $result->fetch_row();
 
-									$cont_column++;
+								if (isset($row)) {
+									echo '<tr class=\'account\'>';
+									
+									$cont_column = 0;
+									foreach ($row as $data) {
+										if ($cont_column == $rol_column) {
+											echo '
+											<td class="w3-dropdown-click w3-container permissions-dropdown">
+												<span>'.$data.'</span>
+												<div class="w3-dropdown-content w3-bar-block w3-border">
+													<button class="w3-bar-item w3-button" onclick="setear('.$cont.', \'admin\')">admin</button>
+													<button class="w3-bar-item w3-button" onclick="setear('.$cont.', \'user\')">user</button>
+												</div>
+											</td>
+											';
+										} else {
+											echo '<td>' . $data . '</td>';
+										}
+	
+										$cont_column++;
+									}
+									
+									echo '</tr>';
+								} else {
+									echo '<tr><td colspan="4"><br></td></tr>';
 								}
-								
-								echo '</tr>';
-								$cont++;
 							}
+							echo '</tbody>';
 						} else {
 							echo 'No se han podido cargar los datos';
 						}
 						?>
 					</table>
-
-					<button style="float:right; margin-top:50px"
+					
+					<button style="float:right"
 						class="w3-hide w3-button w3-light-blue guardar-btn"
 						onclick="guardar()">Guardar</button>
+
+					<span style="float:left; padding-left:2px"> Showing <?php echo $result->num_rows ?> out of 10 </span>
+					<span style="float:right"> 
+					<?php
+					if ($offset > 0) {
+						echo '<a href="./sesion.php?view=accounts&offset='.($offset-10).'"><i class="fa fa-chevron-left icon"></i></a>';
+					}
+					echo $offset.'/'.($offset+10);
+					echo '<a href="./sesion.php?view=accounts&offset='.($offset+10).'"><i style="margin-left:6px" class="fa fa-chevron-right icon"></i></a>';
+					?>
+					</span>
 
 					<script>
 						var dropdowns = $(".permissions-dropdown");
@@ -389,8 +427,61 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 									console.log("actualizada info del user " + index);
 								})
 							});
+
+							cambios = [];
+
+							var guardar_btn = $(".guardar-btn")[0];
+							guardar_btn.className = 'w3-hide' + guardar_btn.className; 
 						}
 					</script>
+				</div>
+			<?php elseif ($_GET['view'] == 'pets') : ?>
+				<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: auto; text-align:justify">
+					<div style="display:flex; justify-content:center; margin-bottom:20px">
+						<h2> MASCOTAS </h2>
+					</div>
+
+					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0">
+						<thead class="w3-green">
+							<th>Raza</th>
+							<th style="width:10%">Edad</th>
+							<th style="width:10%">Jaula</th>
+							<th>Sexo</th>
+							<th style="width:45%">Observaciones</th>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Galgo</td>
+								<td>2 años</td>
+								<td>a23</td>
+								<td>Macho</td>
+								<td>En dieta. Sacar con correa. Apto para adopcion</td>
+							</tr>
+							<tr>
+								<td>Rottweiler</td>
+								<td>3 años</td>
+								<td>a10</td>
+								<td>Hembra</td>
+								<td>Vacunacion necesaria. No apto para adopcion</td>
+							</tr>
+							<tr>
+								<td>Rottweiler</td>
+								<td>2 años</td>
+								<td>b2</td>
+								<td>Macho</td>
+								<td>Castracion programada. Posible adopcion</td>
+							</tr>
+							<tr><td colspan="5"><br></td></tr>
+							<tr><td colspan="5"><br></td></tr>
+							<tr><td colspan="5"><br></td></tr>
+							<tr><td colspan="5"><br></td></tr>
+							<tr><td colspan="5"><br></td></tr>
+							<tr><td colspan="5"><br></td></tr>
+							<tr><td colspan="5"><br></td></tr>
+						</tbody>
+					</table>
+					<span style="float:left">Showing 3 out of 10</span>
+					<span style="float:right">0/10 <i class="fa fa-chevron-right icon"></i></span>
 				</div>
 			<?php else : ?>
 				<?php 
