@@ -3,51 +3,7 @@
 $user = $password = '';
 $GLOBALS['errores'] = [];
 
-function format_input($data)
-{
-	$data = trim($data);
-	$data = stripslashes($data);
-	$data = htmlspecialchars($data);
-	return $data;
-}
-
-function get_username($user) 
-{
-	include 'datos.php';
-	$conn = new mysqli($servername, $username, $password, $db);
-	$sql = "SELECT username FROM users WHERE email='" . $user . "'";
-	if ($result = $conn->query($sql)) {
-		return $result->fetch_row()[0];
-	} else {
-		array_push($GLOBALS['errores'], 'Error obteniendo el nombre de usuario');
-		return false;
-	}
-}
-
-function get_user_id($user) 
-{
-	include 'datos.php';
-	$conn = new mysqli($servername, $username, $password, $db);
-	$sql = 'SELECT id FROM users WHERE username=\'' . $user . '\'';
-	if ($result = $conn->query($sql)) {
-		return $result->fetch_row()[0];
-	} else {
-		return false;
-	}
-}
-
-function get_user_permission($user)
-{
-	include 'datos.php';
-	$conn = new mysqli($servername, $username, $password, $db);
-	$uid = get_user_id($user);
-	$sql = 'SELECT rol FROM permissions WHERE uid=\'' . $uid . '\'';
-	if ($result = $conn->query($sql)) {
-		return $result->fetch_row()[0];
-	} else {
-		return false;
-	}
-}
+include 'utils.php';
 
 if (!isset($_COOKIE['user'])) {
 	if ($_SERVER["REQUEST_METHOD"] == 'POST') {
@@ -100,7 +56,7 @@ if (!isset($_COOKIE['user'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-	if (!empty($_GET['commands'])) {
+	if (isset($_GET['commands'])) {
 		switch ($_GET['commands']) {
 			case 'close':
 			setcookie('user', '', time() - 3600, '/');
@@ -109,12 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	}
 }
 
+// TODO agregar validacion desde el servidor para la contraseña
 ?>
-
-<!-- TODO agregar validacion desde el servidor para la contraseña -->
-
-<!-- generar la pagina distinto dependiendo de que se haya creado una sesion o no -->
-
 <!DOCTYPE html>
 <html>
 
@@ -207,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 				</div>
 				<div id="submit-box" style="float:left">
-					<button class="w3-btn w3-teal" onclick="location.href= '../html/registrarse.html'">Registrarse</button>
+					<button class="w3-btn w3-teal" onclick="location.href= 'registrarse.php'">Registrarse</button>
 					<button class="w3-btn w3-teal" onclick="mandar_form()" style="width:78px">
 						<span id="sesion-text"> Sesion </span> 
 						<i class="fa fa-spinner" style="display:none" id="waiting-spinner"></i>
@@ -304,7 +256,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 						$sql = 'SELECT id, username, email, rol FROM users 
 						INNER JOIN permissions ON users.id = permissions.uid
-						LIMIT '.$offset.', '.($offset+10);
+						ORDER BY id LIMIT '.$offset.', '.($offset+10);
+						
 						$result = $conn->query($sql);
 						
 						if (isset($result)) {
@@ -367,10 +320,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					<span style="float:right"> 
 					<?php
 					if ($offset > 0) {
-						echo '<a href="./sesion.php?view=accounts&offset='.($offset-10).'"><i class="fa fa-chevron-left icon"></i></a>';
+						if ($offset == 10) {
+							$offset_msg = '';
+						} else {
+							$offset_msg = '&offset='.($offset-10);
+						}
+
+						echo '<a href="./sesion.php?view=accounts'.$offset_msg.'"><i class="fa fa-chevron-left icon"></i></a>';
 					}
 					echo $offset.'/'.($offset+10);
-					echo '<a href="./sesion.php?view=accounts&offset='.($offset+10).'"><i style="margin-left:6px" class="fa fa-chevron-right icon"></i></a>';
+					if ($result->num_rows == 10) {
+						echo '<a href="./sesion.php?view=accounts&offset='.($offset+10).'"><i style="margin-left:6px" class="fa fa-chevron-right icon"></i></a>';
+					}
 					?>
 					</span>
 

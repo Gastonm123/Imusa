@@ -30,9 +30,11 @@ $(function () {
             return false
         else {
             return {
-                email: mail.val(),
-                password: password.val(),
-                username: username.val(),
+                usuario: {
+                    email: mail.val(),
+                    password: password.val(),
+                    username: username.val(),
+                }
             }
         }
     }
@@ -47,6 +49,7 @@ $(function () {
         if (input) {
             $.post('../php/registrarse.php', input,
                 function (data, status, xhr) {
+                    alert(data);
                     location.href = '../php/sesion.php'
                 }
             );

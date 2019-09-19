@@ -1,8 +1,6 @@
 <?php
 
-include 'datos.php';
-
-$conn = new mysqli($servername, $username, $password, $db);
+include 'conexion.php';
 $injeccion = '\' UNION SELECT * FROM information_schema.USER_PRIVILEGES 
     UNION SELECT * FROM information_schema.USER_PRIVILEGES WHERE GRANTEE=\'';
 $sql = 'SELECT * FROM users WHERE id=\''.$injeccion.'\'';

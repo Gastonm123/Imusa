@@ -1,8 +1,6 @@
 <?php
 
-include 'datos.php';
-
-$conn = new mysqli($servername, $username, $password, $db);
+include 'conexion.php';
 
 if ($conn->connect_error) {
 	echo "Error ingresando a la base de datos";
