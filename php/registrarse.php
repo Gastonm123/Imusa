@@ -12,6 +12,7 @@ if (isset($_POST['usuario'])) {
 	$db = new Database();
 
 	if ($db->error) {
+        echo $db->error;
 		die;
 	}
 	
@@ -22,7 +23,12 @@ if (isset($_POST['usuario'])) {
 	
 	$usuario = new Usuario(['username'=>$username, 'password'=>$password, 'email'=>$email]);
 	
-	$result = $db->crearUser($usuario);
+    $result = $db->crearUser($usuario);
+    
+    if ($db->error) {
+        echo $db->error;
+        die;
+    }
 
 	$db->cerrar();
 	die;

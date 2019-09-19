@@ -1,55 +1,66 @@
 <?php
 
+include_once 'database.php';
+include_once 'utils.php';
+
+$db = new Database();
+
+if ($db->error) {
+	echo '<h1>Imposible conectarse a la base de datos</h1>';
+	die;
+}
+
+// TODO morir si la instancia db no fue creada bien
+
 $user = $password = '';
 $GLOBALS['errores'] = [];
 
-include 'utils.php';
 
-if (!isset($_COOKIE['user'])) {
-	if ($_SERVER["REQUEST_METHOD"] == 'POST') {
-		if (empty($_POST['user'])) {
-			array_push($GLOBALS['errores'], 'User or email is required');
+if (!isset($_COOKIE['user']) && $_SERVER["REQUEST_METHOD"] == 'POST') {
+	if (empty($_POST['user'])) {
+		array_push($GLOBALS['errores'], 'User or email is required');
+	} else {
+		$user = format_input($_POST["user"]);
+		if (preg_match("/^[a-zA-Z 0-9_]*$/", $user)) {
+			$userType = 'username';
+		} else if (filter_var($user, FILTER_VALIDATE_EMAIL)) {
+			$userType = 'email';
 		} else {
-			$user = format_input($_POST["user"]);
-			if (preg_match("/^[a-zA-Z 0-9_]*$/", $user)) {
-				$userType = 'username';
-			} else if (filter_var($user, FILTER_VALIDATE_EMAIL)) {
-				$userType = 'email';
-			} else {
-				array_push($GLOBALS['errores'], 'Invalid user or email');
-			}
+			array_push($GLOBALS['errores'], 'Invalid user or email');
 		}
+	}
 
-		if (empty($_POST['password'])) {
-			array_push($GLOBALS['errores'], 'Password is required');
+	if (empty($_POST['password'])) {
+		array_push($GLOBALS['errores'], 'Password is required');
+	} else {
+		$password = format_input($_POST["password"]);
+	}
+
+	if (empty($GLOBALS['errores'])) {
+		$data = array('password' => $password, 'user' => $user);
+		$GLOBALS['userType'] = $userType;
+
+		if (validar_data($db, $data)) {
+			setcookie('user', $user, time() + (10 * 365 * 24 * 60 * 60), '/');
+			die('
+			<script>
+				location.href = "./sesion.php"
+			</script>
+			');
 		} else {
-			$password = format_input($_POST["password"]);
+			echo $db->error;
+			die;
+		}
+	}
+
+	if (!empty($GLOBALS['errores'])) {
+		$result = '';
+
+		foreach ($GLOBALS['errores'] as $error) {
+			$result .= $error . '\n';
 		}
 
-		if (empty($GLOBALS['errores'])) {
-			include 'validaciones.php';
-			$data = array('password' => $password, 'user' => $user);
-			$GLOBALS['userType'] = $userType;
-
-			if (validar_data($data)) {
-				setcookie('user', $user, time() + (10 * 365 * 24 * 60 * 60), '/');
-				die('
-				<script>
-					location.href = "./sesion.php"
-				</script>
-				');
-			}
-		}
-
-		if (!empty($GLOBALS['errores'])) {
-			$result = '';
-
-			foreach ($GLOBALS['errores'] as $error) {
-				$result .= $error . '\n';
-			}
-
-			setcookie('errores', $result, time() + 20);
-		}
+		setcookie('errores', $result, time() + 20);
 	}
 }
 
@@ -143,8 +154,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 						$("#waiting-spinner").css('display', 'inline-block');
 						$("#sesion-text").css('display', 'none');
 						$("#waiting-spinner").addClass('w3-spin');
-						$.post('./sesion.php', data,function(a,b,c) {
-							location.href = './sesion.php'
+						$.post(
+							'./sesion.php', 
+							data,
+							function(a,b,c) {
+							console.log(a);
+							// location.href = './sesion.php'
 						})
 					}
 				</script>
@@ -205,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				<a href="#" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 					<i class="fa fa-envelope icon"></i>ENVELOPE
 				</a>
-				<?php if (get_user_permission($_COOKIE['user']) == 'admin') : ?>
+				<?php if (get_user_permission($db, $_COOKIE['user']) == 'admin') : ?>
 					<a href='./sesion.php?view=accounts' class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 						<i class="fa fa-users icon"></i>ACCOUNTS
 					</a>
@@ -232,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 						<p>Praesent at leo sit amet dolor sagittis mattis. Cras blandit dictum sem, quis mattis ligula lacinia sit amet. Aenean aliquet cursus fermentum. Donec porta enim sit amet felis ullamcorper volutpat. Donec tristique mi eget enim sollicitudin tempus. Aliquam sollicitudin purus vitae tortor ullamcorper, et posuere enim auctor. Nunc at felis tempus, mattis justo non, efficitur nisl. Pellentesque vitae pellentesque sapien. Quisque neque purus, rhoncus a volutpat eu, euismod id leo.</p>
 					</div>	
 				</div>
-			<?php elseif (get_user_permission($_COOKIE['user']) == 'admin' && $_GET['view'] == 'accounts') : ?> 
+			<?php elseif (get_user_permission($db, $_COOKIE['user']) == 'admin' && $_GET['view'] == 'accounts') : ?> 
 				<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: auto; text-align:justify">
 					<div style="display:flex; justify-content:center; margin-bottom:20px">
 						<h2>
@@ -242,26 +257,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				
 					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0; margin-bottom: 8px">
 						<?php
-						include 'datos.php';
-						
-						$conn = new mysqli($servername, $username, $password, $db);
-						
 						if (empty($_GET['offset'])) {
 							$offset = 0;
 						} else {
 							$offset = $_GET['offset'];
 						}
 
-						$sql = 'SELECT id, username, email, rol FROM users 
-						INNER JOIN permissions ON users.id = permissions.uid
-						ORDER BY id LIMIT '.$offset.', '.($offset+10);
+						$result = $db->obtenerUsers($offset);
 						
-						$result = $conn->query($sql);
-						
-						if (isset($result)) {
+						if (isset($result) && $db->error == FALSE) {
 							$cont_column = 0;
 							echo '<tr class="w3-green">';
-							while ($field = $result->fetch_field()) {
+							foreach ($result as $field) {
 								echo '<th>' . $field->name . '</th>';
 								
 								if ($field->name == 'rol') {
@@ -444,42 +451,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				</div>
 			<?php else : ?>
 				<?php 
-					if (!isset($servername)) {
-						include 'datos.php';
-					}
+					$user_id = get_user_id($db, $_COOKIE['user']);
+					$result = $db->getUserInfo($user_id);
 
-					$conn = new mysqli($servername, $username, $password, $db);
-					$cargaOk = 1;
-
-					if ($conn->connect_error) {
-						echo '<script>
+					if ($db->error == FALSE) {
+						$name = $result['name'];
+						$surname = $result['surname'];
+						$birthdate = $result['birthdate'];
+						$nacionality = $result['nacionality'];
+						$description = $result['description'];
+						$arr = [
+							'name' => $name, 
+							'surname' => $surname, 
+							'birthdate' => $birthdate, 
+							'nacionality' => $nacionality, 
+							'description' => $description
+						];
+					} else {
+						echo '
+						<script>
 							alert(\'No se ha podido cargar el perfil de usuario\');
 							location.href = \'./sesion.php\'
 						</script>';
-					} else {
-						$user_id = get_user_id($_COOKIE['user']);
-						$sql = 'SELECT * FROM users_info WHERE uid=\'' . $user_id . '\'';
-
-						if ($result = $conn->query($sql)) {
-							$result = $result->fetch_array();
-							$name = $result['name'];
-							$surname = $result['surname'];
-							$birthdate = $result['birthdate'];
-							$nacionality = $result['nacionality'];
-							$description = $result['description'];
-							$arr = [
-								'name' => $name, 
-								'surname' => $surname, 
-								'birthdate' => $birthdate, 
-								'nacionality' => $nacionality, 
-								'description' => $description
-							];
-						} else {
-							echo '<script>
-								alert(\'No se ha podido cargar el perfil de usuario\');
-								location.href = \'./sesion.php\'
-							</script>';
-						}
 					}
 				?>
 
@@ -532,7 +525,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 								}
 							}
 
-							data['uid'] = <?php echo get_user_id($_COOKIE['user']) ?>;
+							data['uid'] = <?php echo get_user_id($db, $_COOKIE['user']) ?>;
 							data['table'] = 'users_info';
 							
 							$("#waiting-spinner").css('display', 'inline-block');
@@ -586,3 +579,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 </body>
 
 </html>
+
+<?php $db->cerrar(); ?>

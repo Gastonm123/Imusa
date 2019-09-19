@@ -1,37 +1,24 @@
 <?php
 
-function validar_data($data)
+function validar_data($db, $data)
 {
-	include('datos.php');
-
-	$conn = new mysqli($servername, $username, $password, $db);
-
-	if ($conn->connect_error) {
-		array_push($GLOBALS['errores'], 'Batabase connection error');
-		return FALSE;
-	}
+	$fields = ['password' => $data['password']];
 
 	//user data could be username or email
 	if ($GLOBALS['userType'] == 'email') {
-		$sql = 'SELECT * FROM users WHERE email=\'' . $data['user'] . '\'';
+		$fields['email'] = $data['user'];
 	} else if ($GLOBALS['userType'] == 'username') {
-		$sql = 'SELECT * FROM users WHERE username=\'' . $data['user'] . '\'';
+		$fields['username'] = $data['user'];
 	}
+	
+	$result = $db->getUser($fields);
 
-	$sql .= ' AND password=SHA1(\'' . $data["password"] . '\')';
-	$response = $conn->query($sql);
-
-	if ($response === FALSE || $response->num_rows == 0) {
-		array_push($GLOBALS['errores'], "Failed login in");
-		return FALSE;
-	} else if ($response->num_rows > 1) {
-		array_push($GLOBALS['errores'], 'Database corrupted');
+	if ($db->error == FALSE) {
+		return TRUE;
+	} else {
 		return FALSE;
 	}
-
-	return TRUE;
 }
-
 
 function format_input($data)
 {
@@ -41,40 +28,26 @@ function format_input($data)
 	return $data;
 }
 
-function get_username($user) 
+function get_user_id($db, $user) 
 {
-	include 'datos.php';
-	$conn = new mysqli($servername, $username, $password, $db);
-	$sql = "SELECT username FROM users WHERE email='" . $user . "'";
-	if ($result = $conn->query($sql)) {
-		return $result->fetch_row()[0];
+	$result = $db->getUser(['username'=>$user]);
+
+	if ($db->error == FALSE) {
+		return $result['id'];
 	} else {
-		array_push($GLOBALS['errores'], 'Error obteniendo el nombre de usuario');
-		return false;
+		return FALSE;
 	}
 }
 
-function get_user_id($user) 
+function get_user_permission($db, $user)
 {
-	include 'datos.php';
-	$conn = new mysqli($servername, $username, $password, $db);
-	$sql = 'SELECT id FROM users WHERE username=\'' . $user . '\'';
-	if ($result = $conn->query($sql)) {
-		return $result->fetch_row()[0];
-	} else {
-		return false;
-	}
-}
+	$id = $get_user_id($user);
 
-function get_user_permission($user)
-{
-	include 'datos.php';
-	$conn = new mysqli($servername, $username, $password, $db);
-	$uid = get_user_id($user);
-	$sql = 'SELECT rol FROM permissions WHERE uid=\'' . $uid . '\'';
-	if ($result = $conn->query($sql)) {
-		return $result->fetch_row()[0];
+	$result = $db->getUserInfo($id);
+
+	if ($db->error == FALSE) {
+		return $result['rol'];
 	} else {
-		return false;
+		return FALSE;
 	}
 }

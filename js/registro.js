@@ -49,7 +49,10 @@ $(function () {
         if (input) {
             $.post('../php/registrarse.php', input,
                 function (data, status, xhr) {
-                    alert(data);
+                    if (data != '') {
+                        alert(data);
+                    }
+                    
                     location.href = '../php/sesion.php'
                 }
             );
