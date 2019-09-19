@@ -1,14 +1,8 @@
 $(function () {
     function checkInput() {
-        var nombre = $("input[name=nombre]");
-        var apellido = $("input[name=apellido]");
         var mail = $("input[name=mail]");
         var username = $("input[name=username]");
         var password = $("input[name=password]");
-        var nacimiento = $("input[name=nacimiento]");
-        var nacionalidad = $("input[name=nacionalidad]");
-        var dni = $("input[name=dni]");
-        var descripcion = $("textarea[name=descripcion]");
 
         var temp = [mail, username, password];
         var band = true;
@@ -36,15 +30,11 @@ $(function () {
             return false
         else {
             return {
-                nombre: nombre.val(),
-                apellido: apellido.val(),
-                email: mail.val(),
-                password: password.val(),
-                usuario: username.val(),
-                nacimiento: nacimiento.val(),
-                nacionalidad: nacionalidad.val(),
-                dni: dni.val(),
-                descripcion: descripcion.val()
+                usuario: {
+                    email: mail.val(),
+                    password: password.val(),
+                    username: username.val(),
+                }
             }
         }
     }
@@ -52,11 +42,15 @@ $(function () {
     $("#finalizar").click(function () {
         var input = checkInput();
 
+        $("#btn-text").css('display', 'none');
+        $("#waiting-spinner").css('display', 'inline-block');
+        $("#waiting-spinner").addClass('w3-spin');
+
         if (input) {
             $.post('../php/registrarse.php', input,
                 function (data, status, xhr) {
-                    console.log('Request status: ' + status);
                     alert(data);
+                    location.href = '../php/sesion.php'
                 }
             );
         }

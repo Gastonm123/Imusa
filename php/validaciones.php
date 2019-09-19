@@ -13,16 +13,16 @@ function validar_data($data)
 
 	//user data could be username or email
 	if ($GLOBALS['userType'] == 'email') {
-		$sql = 'SELECT nombre FROM users WHERE email=\'' . $data['user'] . '\'';
+		$sql = 'SELECT * FROM users WHERE email=\'' . $data['user'] . '\'';
 	} else if ($GLOBALS['userType'] == 'username') {
-		$sql = 'SELECT nombre FROM users WHERE usuario=\'' . $data['user'] . '\'';
+		$sql = 'SELECT * FROM users WHERE username=\'' . $data['user'] . '\'';
 	}
 
 	$sql .= ' AND password=SHA1(\'' . $data["password"] . '\')';
 	$response = $conn->query($sql);
 
 	if ($response === FALSE || $response->num_rows == 0) {
-		array_push($GLOBALS['errores'], 'Failed signing in');
+		array_push($GLOBALS['errores'], "Failed login in");
 		return FALSE;
 	} else if ($response->num_rows > 1) {
 		array_push($GLOBALS['errores'], 'Database corrupted');
