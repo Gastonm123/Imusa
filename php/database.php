@@ -3,30 +3,37 @@
 include_once 'usuario.php';
 include_once 'usuarioInfo.php';
 include_once 'base.php';
+include_once 'sql_base.php';
+include_once 'perro.php';
 
 class Database {
     protected $conn;
+    protected $objetos;
     public $error = False;
+    use sql_base;
     
     public function __construct() {
         $this->conn = new mysqli('localhost', 'poli_uno', 'poli1', 'poli_siete');
-
-        $objetos = [
-            new Usuario(),
-            new UsuarioInfo()
+        $this->objetos = [
+            new Usuario(['db' => $this]),
+            new UsuarioInfo(['db' => $this]),
+            new Perro(['db' => $this])
         ];
 
-        foreach ($objetos as $objeto) {
-            if ($objeto->init($this->conn) == FALSE) {
-                $this->error = 'Error inicializando la base de datos';
+        foreach ($this->objetos as $objeto) {
+            if ($objeto->init() == FALSE) {
+                $this->error = 'Error inicializando la tabla ' . get_class($objeto);
                 break;
             }
         }
     }
 
-    public function actualizarUser (Usuario $usuario) { // TODO hacer obligatorio los campos de usuario
-        $id = $usuario->getId();
-        $sql = $this->updateString($usuario, 'users') . " WHERE id = '$id'";
+    public function query($sql) {
+        return $this->conn->query($sql);
+    }
+
+    public function actualizarUser (Base $objeto) { // TODO hacer obligatorio los campos de usuario
+        $sql = $this->updateString($usuario, 'users') . " WHERE " . $objeto->sql_id;
         
         $result = $this->conn->query($sql);
 
@@ -38,32 +45,12 @@ class Database {
     }
 
     public function drop() {
-        $tablas = [
-            'users',
-            'users_info'
-        ];
-
-        foreach ($tablas as $tabla) {
-            $result = $this->conn->query("DROP TABLE IF EXISTS $tabla");
-
-            if ($result == FALSE) {
-                $this->error = 'Error eliminando las bases de datos';
-                return;
+        foreach ($this->objetos as $objeto) {
+            if ($objeto->drop() == FALSE) {
+                $this->error = "Error eliminando la tabla " . get_class($objeto);
+                break;
             }
         }
-    }
-
-    public function actualizarUserInfo (UsuarioInfo $usuario) {
-        $id = $usuario->getId();
-        $sql = $this->updateString($usuario, 'users_info') . " WHERE uid = '$id'";
-
-        $result = $this->conn->query($sql);
-
-        $this->error = $sql;
-        if ($result == FALSE) {
-        }
-
-        return $result;
     }
 
     public function crearUser(Usuario $usuario) {
@@ -101,7 +88,21 @@ class Database {
             return;
         }
 
-        return $result->fetch_array();
+        return $result;
+    }
+
+    public function obtenerPerros($offset) {
+        $sql = 'SELECT * FROM perros 
+            ORDER BY id LIMIT '.$offset.', '.($offset+10);
+        
+        $result = $this->query($sql);
+        
+        if ($result == FALSE) {
+            $this->error = 'Error obteniendo los perros';
+            return;
+        }
+
+        return $result;
     }
 
 
@@ -138,8 +139,10 @@ class Database {
         $this->conn->close();
     }
 
-    public function borrarUser () {
-        // PASS
+    public function borrarUser ($id) {
+        $sql = "DELETE FROM users WHERE id=$id";
+
+        return $this->conn->query($sql);
     }
 
     private function lastId() {
@@ -147,68 +150,5 @@ class Database {
         $arr = $result->fetch_assoc();
 
         return $arr['LAST_INSERT_ID()'];
-    }
-
-    private function updateString(Base $object, $table) {
-        $fields = '';
-
-        foreach ($object as $key => $value) {
-            if (empty($value)) {
-                continue;
-            }
-
-            $fields .= "$key='$value',";
-        }
-
-        $fields = rtrim($fields, ',');
-
-        $id = $object->getId();
-        $sql = "UPDATE $table SET $fields";
-
-        return $sql;
-    }
-
-    private function whereString($fields) {
-        $string = '';
-
-        foreach ($fields as $key => $value) {
-            // TODO poner hash al value si la key es password
-            if ($key == 'password') {
-                $string .= "$key=SHA1('$value') AND ";
-            } else {
-                $string .= "$key='$value' AND ";
-            }
-        }
-
-        $string = rtrim($string, ' AND');
-
-        return $string;
-    }
-
-    private function insertString(Base $object, $table) {
-        $fields = '';
-        $values = '';
-
-        foreach ($object as $key => $value) {
-            if (empty($value)) {
-                continue;
-            }
-
-            if ($key == 'password') {
-                $values .= "SHA1('$value'),";
-            } else {
-                $values .= "'$value',";
-            }
-            
-            $fields .= "$key,";
-        }
-
-        $fields = rtrim($fields, ',');
-        $values = rtrim($values, ',');
-
-        $id = $object->getId();
-        $sql = "INSERT INTO $table ($fields) VALUES ($values)";
-
-        return $sql;
     }
 }

@@ -1,12 +1,14 @@
 <?php
 
 include_once 'database.php';
+include_once 'usuario.php';
+include_once 'perro.php';
 include_once 'utils.php';
 
 $db = new Database();
 
 if ($db->error) {
-	echo '<h1>Imposible conectarse a la base de datos</h1>';
+	echo "<h1>$db->error</h1>";
 	die;
 }
 
@@ -88,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	<link rel="stylesheet" href="../css/nav.css">
 	<link rel="stylesheet" href="../css/sesion.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<script type="text/javascript" src="../lib/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
 	<script src="../js/sesion.js"></script>
 	<script src='../js/sticky_nav.js'></script>
 	<link rel="shortcut icon" href="../img/logo.ico"/>
@@ -256,63 +258,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				
 					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0; margin-bottom: 8px">
 						<?php
-						if (empty($_GET['offset'])) {
-							$offset = 0;
-						} else {
-							$offset = $_GET['offset'];
-						}
+						$offset = getOffset();
 
-						$result = $db->obtenerUsers($offset);
-						
-						if (isset($result) && $db->error == FALSE) {
-							$cont_column = 0;
-							echo '<tr class="w3-green">';
-							foreach ($result as $field) {
-								echo '<th>' . $field->name . '</th>';
-								
-								if ($field->name == 'rol') {
-									$rol_column = $cont_column;
-								} 
+						$usuario = new Usuario(['db' => $db]);
 
-								$cont_column++;
-							}
-							echo '</tr>';
-							
-							echo '<tbody>';
-							for ($cont=0; $cont < 10; $cont++) { 
-								$row = $result->fetch_row();
-
-								if (isset($row)) {
-									echo '<tr class=\'account\'>';
-									
-									$cont_column = 0;
-									foreach ($row as $data) {
-										if ($cont_column == $rol_column) {
-											echo '
-											<td class="w3-dropdown-click w3-container permissions-dropdown">
-												<span>'.$data.'</span>
-												<div class="w3-dropdown-content w3-bar-block w3-border">
-													<button class="w3-bar-item w3-button" onclick="setear('.$cont.', \'admin\')">admin</button>
-													<button class="w3-bar-item w3-button" onclick="setear('.$cont.', \'user\')">user</button>
-												</div>
-											</td>
-											';
-										} else {
-											echo '<td>' . $data . '</td>';
-										}
-	
-										$cont_column++;
-									}
-									
-									echo '</tr>';
-								} else {
-									echo '<tr><td colspan="4"><br></td></tr>';
-								}
-							}
-							echo '</tbody>';
-						} else {
-							echo 'No se han podido cargar los datos';
-						}
+						$result = $usuario->vistaArbol($offset);
 						?>
 					</table>
 					
@@ -323,19 +273,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					<span style="float:left; padding-left:2px"> Showing <?php echo $result->num_rows ?> out of 10 </span>
 					<span style="float:right"> 
 					<?php
-					if ($offset > 0) {
-						if ($offset == 10) {
-							$offset_msg = '';
-						} else {
-							$offset_msg = '&offset='.($offset-10);
-						}
-
-						echo '<a href="./sesion.php?view=accounts'.$offset_msg.'"><i class="fa fa-chevron-left icon"></i></a>';
-					}
-					echo $offset.'/'.($offset+10);
-					if ($result->num_rows == 10) {
-						echo '<a href="./sesion.php?view=accounts&offset='.($offset+10).'"><i style="margin-left:6px" class="fa fa-chevron-right icon"></i></a>';
-					}
+					# flechitas
+					vistaOffset($result);
 					?>
 					</span>
 
@@ -365,7 +304,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 							var accounts = $('.account');
 							var account_id = +accounts[usuario].children[0].innerHTML;
 
-							var posicion_permiso = <?php echo $rol_column ?>
+							var posicion_permiso = <?php echo $result->rol_column ?>
 
 							var tr_permiso = accounts[usuario].children[posicion_permiso];
 
@@ -407,46 +346,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					</div>
 
 					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0">
-						<thead class="w3-green">
-							<th>Raza</th>
-							<th style="width:10%">Edad</th>
-							<th style="width:10%">Jaula</th>
-							<th>Sexo</th>
-							<th style="width:45%">Observaciones</th>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Galgo</td>
-								<td>2 años</td>
-								<td>a23</td>
-								<td>Macho</td>
-								<td>En dieta. Sacar con correa. Apto para adopcion</td>
-							</tr>
-							<tr>
-								<td>Rottweiler</td>
-								<td>3 años</td>
-								<td>a10</td>
-								<td>Hembra</td>
-								<td>Vacunacion necesaria. No apto para adopcion</td>
-							</tr>
-							<tr>
-								<td>Rottweiler</td>
-								<td>2 años</td>
-								<td>b2</td>
-								<td>Macho</td>
-								<td>Castracion programada. Posible adopcion</td>
-							</tr>
-							<tr><td colspan="5"><br></td></tr>
-							<tr><td colspan="5"><br></td></tr>
-							<tr><td colspan="5"><br></td></tr>
-							<tr><td colspan="5"><br></td></tr>
-							<tr><td colspan="5"><br></td></tr>
-							<tr><td colspan="5"><br></td></tr>
-							<tr><td colspan="5"><br></td></tr>
-						</tbody>
+						<?php
+						$offset = getOffset();
+
+						$perro = new Perro(['db' => $db]);
+
+						$result = $perro->vistaArbol($offset);
+						?>
 					</table>
-					<span style="float:left">Showing 3 out of 10</span>
-					<span style="float:right">0/10 <i class="fa fa-chevron-right icon"></i></span>
+					<span style="float:left; padding-left:2px"> Showing <?php echo $result->num_rows ?> out of 10 </span>
+					<span style="float:right"> 
+					<?php
+					# flechitas
+					vistaOffset($result);
+					?>
+					</span>
 				</div>
 			<?php else : ?>
 				<?php 

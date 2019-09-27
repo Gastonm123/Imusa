@@ -10,7 +10,7 @@ class UsuarioInfo extends Base {
     public $description;
     public $rol;
 
-    public function init($conn) {
+    public function init() {
         $sql = "CREATE TABLE IF NOT EXISTS users_info(
             uid INT NOT NULL,
             name VARCHAR(20),
@@ -23,8 +23,17 @@ class UsuarioInfo extends Base {
             UNIQUE KEY (uid)
         )";
 
-        $result = $conn->query($sql);
+        return $this->db->query($sql);
+    }
 
-        return $result;
+    public function drop() {
+        $sql = "DROP TABLE IF EXISTS users_info";
+
+        return $this->db->query($sql);
+    }
+
+    public function sql_id() {
+        $id = $this->uid;
+        return "uid=$id";
     }
 }

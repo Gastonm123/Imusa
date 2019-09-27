@@ -46,7 +46,7 @@ if (isset($_POST['usuario'])) {
     <link rel="stylesheet" href="../css/document.css">
     <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/registrarse.css">
-    <script type="text/javascript" src="../lib/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/sticky_nav.js"></script>
     <script src="../js/registro.js"></script>
     <link rel="shortcut icon" href="../img/logo.ico"/>

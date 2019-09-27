@@ -1,5 +1,35 @@
 <?php
 
+function getOffset() 
+{
+	if (empty($_GET['offset'])) {
+		$offset = 0;
+	} else {
+		$offset = $_GET['offset'];
+	}
+
+	return $offset;
+}
+
+function vistaOffset($result) 
+{
+	$offset = getOffset();
+
+	if ($offset > 0) {
+		if ($offset == 10) {
+			$offset_msg = '';
+		} else {
+			$offset_msg = '&offset='.($offset-10);
+		}
+
+		echo '<a href="./sesion.php?view=accounts'.$offset_msg.'"><i class="fa fa-chevron-left icon"></i></a>';
+	}
+	echo $offset.'/'.($offset+10);
+	if ($result->num_rows == 10) {
+		echo '<a href="./sesion.php?view=accounts&offset='.($offset+10).'"><i style="margin-left:6px" class="fa fa-chevron-right icon"></i></a>';
+	}
+}
+
 function validar_data($db, $data)
 {
 	$fields = ['password' => $data['password']];
