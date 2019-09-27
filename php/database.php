@@ -33,7 +33,7 @@ class Database {
     }
 
     public function actualizarUser (Base $objeto) { // TODO hacer obligatorio los campos de usuario
-        $sql = $this->updateString($usuario, 'users') . " WHERE " . $objeto->sql_id;
+        $sql = $this->updateString($objeto, 'users') . " WHERE " . $objeto->sql_id;
         
         $result = $this->conn->query($sql);
 
@@ -106,7 +106,7 @@ class Database {
     }
 
 
-    public function getUserInfo($id) {
+    public function obtenerUserInfo($id) {
         $sql = "SELECT name, surname, birthdate, nacionality, description, rol 
             FROM users_info WHERE uid = $id";
 

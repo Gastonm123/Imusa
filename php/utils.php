@@ -73,7 +73,7 @@ function get_user_permission($db, $user)
 {
 	$id = get_user_id($db, $user);
 
-	$result = $db->getUserInfo($id);
+	$result = $db->obtenerUserInfo($id);
 
 	if ($db->error == FALSE) {
 		return $result['rol'];

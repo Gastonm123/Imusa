@@ -365,7 +365,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			<?php else : ?>
 				<?php 
 					$user_id = get_user_id($db, $_COOKIE['user']);
-					$result = $db->getUserInfo($user_id);
+					$result = $db->obtenerUserInfo($user_id);
 
 					if ($db->error == FALSE) {
 						$name = $result['name'];
