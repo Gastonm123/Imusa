@@ -4,7 +4,7 @@ function validar_data($db, $data)
 {
 	$fields = ['password' => $data['password']];
 
-	//user data could be username or email
+	// user data could be username or email
 	if ($GLOBALS['userType'] == 'email') {
 		$fields['email'] = $data['user'];
 	} else if ($GLOBALS['userType'] == 'username') {
@@ -41,13 +41,14 @@ function get_user_id($db, $user)
 
 function get_user_permission($db, $user)
 {
-	$id = $get_user_id($user);
+	$id = get_user_id($db, $user);
 
 	$result = $db->getUserInfo($id);
 
 	if ($db->error == FALSE) {
 		return $result['rol'];
 	} else {
+		echo $db->error;
 		return FALSE;
 	}
 }

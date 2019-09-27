@@ -158,8 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 							'./sesion.php', 
 							data,
 							function(a,b,c) {
-							console.log(a);
-							// location.href = './sesion.php'
+								location.href = './sesion.php'
 						})
 					}
 				</script>
