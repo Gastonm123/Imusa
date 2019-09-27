@@ -91,7 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	<link rel="stylesheet" href="../css/sesion.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
-	<script src="../js/sesion.js"></script>
 	<script src='../js/sticky_nav.js'></script>
 	<link rel="shortcut icon" href="../img/logo.ico"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
@@ -300,11 +299,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 							});
 						}
 						
+						// ANCHOR que pasa con result
 						function setear(usuario, permiso) {
 							var accounts = $('.account');
 							var account_id = +accounts[usuario].children[0].innerHTML;
 
-							var posicion_permiso = <?php echo $result->rol_column ?>
+							var posicion_permiso = <?php echo $result->rol_column ?>;
 
 							var tr_permiso = accounts[usuario].children[posicion_permiso];
 
@@ -390,95 +390,60 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				?>
 
 				<?php if ($_GET['view'] == 'user') : ?>
+				<!-- VISTA USUARIO -->
+					<div class="w3-pale-yellow w3-round w3-padding user-view">
+						<?php 
+							$usuario = new Usuario(['db' => $db, 'username' => $_COOKIE['user']]);
 
-					<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: auto; text-align:justify">
-						<div style="display:block; margin-bottom:30px">
-							<div class="w3-padding" style="float:right; height:auto; width: auto">
-								<img src="../img/usuario.png" style="width: 100px; height: 100px">
-							</div>
-							<div>
-								<h2>Usuario</h2>
-								<h3 class="w3-margin"> <?php echo $_COOKIE['user'] ?> </h3>
-							</div>
-						</div>
-						<div class="w3-padding">
-							Nombre <br>
-							<?php echo $name ?> <br>
-							Apellido <br>
-							<?php echo $surname ?> <br>
-							Cumpleaños <br>
-							<?php echo $birthdate ?> <br>
-							Nacionalidad <br>
-							<?php echo $nacionality ?> <br>
-							Descripcion <br>
-							<?php echo $description ?> <br>
-						</div>
-						<button class='w3-btn w3-cyan' style='float:right; margin-top:20px'
-							onclick="location.href = './sesion.php?view=user-edit'">Editar</button>
+							$usuario->vistaFormulario();
+						?>
 					</div>
-
 				<?php elseif ($_GET['view'] == 'user-edit') : ?>
+				<!-- VISTA EDIT USUARIO -->
 					<script>
-						var previous_values = {};
+						var server_values = {};
 
 						<?php foreach ($arr as $key => $value) {
-							if (!empty($value)) {
-								echo 'previous_values[\''.$key.'\'] = \''.$value.'\';';
+							if (isset($value)) {
+								echo 'server_values[\''.$key.'\'] = \''.$value.'\';';
 							}
-						} ?>
+						} 
+						?>
 
 						function mandar_user_data() {
 							var data = {};
-							var user_data = $('.user-data');
+							var user_data = $('.form-slot');
 
+							// diff entre la data local y la data del servidor
 							for (let i = 0; i < user_data.length; i++) {
 								let field = user_data[i];
-								if (field.value != previous_values[field.name]) {
+								if (field.value != server_values[field.name] && field.value != '') {
 									data[field.name] = field.value;
 								}
 							}
 
+							// ANCHOR no se esta obteniendo el id
 							data['uid'] = <?php echo get_user_id($db, $_COOKIE['user']) ?>;
 							data['table'] = 'users_info';
+
+							console.log(data);
 							
 							$("#waiting-spinner").css('display', 'inline-block');
 							$("#terminar-text").css('display', 'none');
 							$("#waiting-spinner").addClass('w3-spin');
 							$.post('update_user_data.php', data,
 								function (data, status, xhr) {
-									location.href = './sesion.php?view=user';
+									// location.href = './sesion.php?view=user';
 							})
 						}
 					</script>
 					
-					<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: auto; text-align:justify">
-						<div style="display:block; margin-bottom:30px">
-							<div class="w3-padding" style="float:right; height:auto; width: auto">
-								<img src="../img/usuario.png" style="width: 100px; height: 100px">
-							</div>
-							<div>
-								<h2>Usuario</h2>
-								<h3 class='w3-margin'> <?php echo $_COOKIE['user'] ?> </h3>
-							</div>
-						</div>
-						<div class="w3-padding">
-							Nombre <br>
-							<input type="text" class="w3-input user-data" name="name" value="<?php echo $name ?>">
-							Apellido <br>
-							<input type="text" class="w3-input user-data" name="surname" value="<?php echo $surname ?>">
-							Cumpleaños <br>
-							<input type="date" class="w3-input user-data" name="birthdate" value="<?php echo $birthdate ?>">
-							Nacionalidad <br>
-							<input type="text" class="w3-input user-data" name="nacionality" value="<?php echo $nacionality ?>">
-							Descripcion <br>
-							<input type="text" class="w3-input user-data" name="description" value="<?php echo $description ?>">
-							
-							<button onclick="mandar_user_data()" 
-								class="w3-btn w3-cyan" style="float:right; margin-top:20px">
-								<span id="terminar-text"> TERMINAR </span> 
-								<i class="fa fa-spinner" style="display:none" id="waiting-spinner"></i>
-							</button>
-						</div>
+					<div class="w3-pale-yellow w3-round w3-padding user-view">
+						<?php 
+							$usuario = new Usuario(['db' => $db, 'username' => $_COOKIE['user']]);
+
+							$usuario->vistaFormulario();
+						?>
 					</div>
 				<?php else : ?>
 					<script>

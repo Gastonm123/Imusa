@@ -72,12 +72,36 @@ article div h2 {
 .form-content {
     background-color: #f9f9f9;
     width: 100%;
-    height: 100%;
+    flex-grow: 10;
     padding-top: 20px;
     padding-left: 10px;
 }
 
-.form-slot {
+.form-slot, .date-container {
     margin-bottom: 10px;
     background-color: #f9f9f9;
+}
+
+.user-view {
+    width: 100%; 
+    height: auto; 
+    display:flex; 
+    flex-direction: column;
+}
+
+.no-input {
+    background-color: rgba(0,0,0,0);
+    border: none;
+    margin: 0px;
+}
+
+.date-container {
+    color: #9aa0bd;
+    padding: 10px;
+    display: flex;
+}
+
+.date-span {
+    margin-top: -10px; 
+    margin-left: -2px
 }

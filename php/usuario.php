@@ -28,14 +28,9 @@ class Usuario extends Base {
     }
 
     public function vistaFormulario() {
-        # obtener datos de user_info y mostrarlos incluyendo la plantilla
-        $result = $this->db->obtenerUserInfo($this->id);
+        # mostrar la plantilla de user
 
-        // $name = $result['name'];
-        // $surname = $result['surname'];
-        // $birthdate = $result['birthdate'];
-        // $nacionality = $result['nacionality'];
-        // $description = $result['description'];
+        $username = $this->username;
 
         include '../views/usuarioForm.php';
     }
