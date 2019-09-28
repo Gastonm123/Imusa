@@ -38,7 +38,6 @@ class Database {
         $result = $this->conn->query($sql);
 
         if (!$result) {
-            var_dump()
             $this->error = "Error actualizando el usuario";
         }
 

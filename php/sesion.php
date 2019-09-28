@@ -296,45 +296,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 								}
 							});
 						}
-						
-						// ANCHOR que pasa con result
-						function setear(usuario, permiso) {
-							var accounts = $('.account');
-							var account_id = +accounts[usuario].children[0].innerHTML;
-
-							var posicion_permiso = <?php echo $result->rol_column ?>;
-
-							var tr_permiso = accounts[usuario].children[posicion_permiso];
-
-							tr_permiso.children[0].innerHTML = permiso;
-
-							cambios[account_id] = permiso; 
-
-							//mostrar el boton de guardar
-							var guardar_btn = $(".guardar-btn")[0];
-							if (guardar_btn.className.indexOf('w3-hide') != -1) {
-								guardar_btn.className = guardar_btn.className.replace("w3-hide", "");
-							}
-						}
-
-						function guardar() {
-							cambios.forEach((element, index) => {
-								var data = {
-									'uid': index,
-									'table': 'permissions',
-									'rol': element
-								}
-
-								$.post('update_user_data.php', data, function(a,b,c){
-									console.log("actualizada info del user " + index);
-								})
-							});
-
-							cambios = [];
-
-							var guardar_btn = $(".guardar-btn")[0];
-							guardar_btn.className = 'w3-hide' + guardar_btn.className; 
-						}
 					</script>
 				</div>
 			<?php elseif ($_GET['view'] == 'perroTree') : ?>
@@ -344,7 +305,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					</div>
 
 					<div class="w3-padding">
-						<a href="./sesion.php?view=perroForm" class="w3-btn w3-blue">Ingresar perro</a>
+						<a href="./sesion.php?view=perro" class="w3-btn w3-blue">Ingresar perro</a>
 					</div>
 					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0">
 						<?php
@@ -363,13 +324,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					?>
 					</span>
 				</div>
+
+				<script>
+					var perros = $('.account');
+					
+					perros.each((index, perro) => {
+						perro.onclick = function(){
+							location.href = './sesion.php?view=perro&id=' + perro.id;
+						}
+					});
+				</script>
 			<?php elseif ($_GET['view'] == 'perro' || $_GET['view'] == 'perro-edit') : ?>
 			<!-- VISTA PERRO -->
 				<div class="w3-pale-yellow w3-round w3-padding user-view">
 						<?php 
-							$usuario = new Usuario(['db' => $db, 'username' => $_COOKIE['user']]);
+							$perro = new Perro(['db' => $db]);
 
-							$usuario->vistaFormulario();
+							$perro->vistaFormulario();
 						?>
 				</div>
 			<?php else : ?>

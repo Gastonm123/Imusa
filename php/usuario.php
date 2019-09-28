@@ -49,7 +49,7 @@ class Usuario extends Base {
                 if ($field->name == 'rol') {
                     # seteo la variable en result por q al final lo devuelvo como
                     # informacion adicional de la vista
-                    $result->rol_column = $cont_column;
+                    $rol_column = $cont_column;
                 } 
 
                 $cont_column++;
@@ -65,13 +65,13 @@ class Usuario extends Base {
                     
                     $cont_column = 0;
                     foreach ($row as $data) {
-                        if ($cont_column == $result->rol_column) {
+                        if ($cont_column == $rol_column) {
                             echo '
                             <td class="w3-dropdown-click w3-container permissions-dropdown">
                                 <span>'.$data.'</span>
                                 <div class="w3-dropdown-content w3-bar-block w3-border">
-                                    <button class="w3-bar-item w3-button" onclick="setear('.$cont.', \'admin\')">admin</button>
-                                    <button class="w3-bar-item w3-button" onclick="setear('.$cont.', \'user\')">user</button>
+                                    <button class="w3-bar-item w3-button" onclick="setear('.$cont.', \'admin\', '.$rol_column.')">admin</button>
+                                    <button class="w3-bar-item w3-button" onclick="setear('.$cont.', \'user\', '.$rol_column.')">user</button>
                                 </div>
                             </td>
                             ';

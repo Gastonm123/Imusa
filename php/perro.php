@@ -33,6 +33,8 @@ class Perro extends Base {
 
     public function vistaFormulario() {
         # crear vista
+
+        include '../views/perroForm.php';
     }
 
     public function vistaArbol($offset) {
@@ -53,7 +55,7 @@ class Perro extends Base {
                 $row = $result->fetch_row();
 
                 if (isset($row)) {
-                    echo '<tr class=\'account\'>';
+                    echo "<tr class='account' id='$cont'>";
                 
                     foreach ($row as $data) {
                         echo '<td>' . $data . '</td>';

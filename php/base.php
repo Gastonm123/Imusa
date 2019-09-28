@@ -1,5 +1,7 @@
 <?php
 
+include_once 'utils.php';
+
 class Base {
     protected $id;
     
@@ -19,6 +21,10 @@ class Base {
 
     public function sql_id() {
         $id = $this->id;
-        return "uid=$id";
+        return "id='$id'";
+    }
+
+    public function setId($id) {
+        $this->id = $id;
     }
 }

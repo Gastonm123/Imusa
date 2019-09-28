@@ -33,7 +33,7 @@ class UsuarioInfo extends Base {
     }
 
     public function sql_id() {
-        $id = $this->uid;
-        return "uid=$id";
+        $id = $this->id;
+        return "uid='$id'";
     }
 }

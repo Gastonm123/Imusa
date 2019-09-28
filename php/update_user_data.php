@@ -15,15 +15,19 @@ $return = [];
 unset($_POST['uid']);
 unset($_POST['table']);
 
-$objeto = new Base($_POST);
+if ($table == 'users_info') {
+    $objeto = new UsuarioInfo($_POST);
+} else {
+    $objeto = new Base($_POST);
+}
+
+$objeto->setId($uid);
 $db = new Database();
 
 $db->actualizarUser($objeto, $table);
 
 if ($db->error) {
-    die;
-    $return['error'] = $db->error;
+    echo $db->error;
 }
 
-header('Content-Type: application/json');
-echo json_encode($return);
+$db->cerrar();
