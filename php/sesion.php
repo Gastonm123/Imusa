@@ -92,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
 	<script src='../js/sticky_nav.js'></script>
+	<script src='../js/database.js'></script>
 	<link rel="shortcut icon" href="../img/logo.ico"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 </head>
@@ -217,15 +218,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				<a href="./sesion.php?view=user" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 					<i class="fa fa-user icon"></i>USER
 				</a>
-				<a href="#" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
-					<i class="fa fa-envelope icon"></i>ENVELOPE
-				</a>
 				<?php if (get_user_permission($db, $_COOKIE['user']) == 'admin') : ?>
 					<a href='./sesion.php?view=accounts' class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 						<i class="fa fa-users icon"></i>ACCOUNTS
 					</a>
 				<?php endif; ?>
-				<a href="./sesion.php?view=pets" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
+				<a href="./sesion.php?view=perroTree" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 					<i class="fa fa-paw icon"></i>MASCOTAS
 				</a>
 				<button onclick='cerrar_cuenta()' class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
@@ -339,12 +337,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 						}
 					</script>
 				</div>
-			<?php elseif ($_GET['view'] == 'pets') : ?>
+			<?php elseif ($_GET['view'] == 'perroTree') : ?>
 				<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: auto; text-align:justify">
 					<div style="display:flex; justify-content:center; margin-bottom:20px">
 						<h2> MASCOTAS </h2>
 					</div>
 
+					<div class="w3-padding">
+						<a href="./sesion.php?view=perroForm" class="w3-btn w3-blue">Ingresar perro</a>
+					</div>
 					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0">
 						<?php
 						$offset = getOffset();
@@ -361,6 +362,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					vistaOffset($result);
 					?>
 					</span>
+				</div>
+			<?php elseif ($_GET['view'] == 'perro' || $_GET['view'] == 'perro-edit') : ?>
+			<!-- VISTA PERRO -->
+				<div class="w3-pale-yellow w3-round w3-padding user-view">
+						<?php 
+							$usuario = new Usuario(['db' => $db, 'username' => $_COOKIE['user']]);
+
+							$usuario->vistaFormulario();
+						?>
 				</div>
 			<?php else : ?>
 				<?php 
@@ -389,17 +399,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					}
 				?>
 
-				<?php if ($_GET['view'] == 'user') : ?>
-				<!-- VISTA USUARIO -->
-					<div class="w3-pale-yellow w3-round w3-padding user-view">
-						<?php 
-							$usuario = new Usuario(['db' => $db, 'username' => $_COOKIE['user']]);
-
-							$usuario->vistaFormulario();
-						?>
-					</div>
-				<?php elseif ($_GET['view'] == 'user-edit') : ?>
-				<!-- VISTA EDIT USUARIO -->
+				<?php if ($_GET['view'] == 'user' || $_GET['view'] == 'user-edit') : ?>
+				<!-- VISTA USUARIO Y EDIT USUARIO -->
 					<script>
 						var server_values = {};
 
@@ -409,35 +410,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 							}
 						} 
 						?>
-
-						function mandar_user_data() {
-							var data = {};
-							var user_data = $('.form-slot');
-
-							// diff entre la data local y la data del servidor
-							for (let i = 0; i < user_data.length; i++) {
-								let field = user_data[i];
-								if (field.value != server_values[field.name] && field.value != '') {
-									data[field.name] = field.value;
-								}
-							}
-
-							// ANCHOR no se esta obteniendo el id
-							data['uid'] = <?php echo get_user_id($db, $_COOKIE['user']) ?>;
-							data['table'] = 'users_info';
-
-							console.log(data);
-							
-							$("#waiting-spinner").css('display', 'inline-block');
-							$("#terminar-text").css('display', 'none');
-							$("#waiting-spinner").addClass('w3-spin');
-							$.post('update_user_data.php', data,
-								function (data, status, xhr) {
-									// location.href = './sesion.php?view=user';
-							})
-						}
 					</script>
-					
+
 					<div class="w3-pale-yellow w3-round w3-padding user-view">
 						<?php 
 							$usuario = new Usuario(['db' => $db, 'username' => $_COOKIE['user']]);

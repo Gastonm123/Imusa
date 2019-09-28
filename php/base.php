@@ -1,6 +1,6 @@
 <?php
 
-abstract class Base {
+class Base {
     protected $id;
     
     public function __construct(array $attributes = []) {

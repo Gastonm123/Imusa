@@ -1,45 +1,29 @@
 <?php
 
-include 'datos.php';
-
-if ($_SERVER["REQUEST_METHOD"] != 'POST') {
-    die;
-}
-
-$conn = new mysqli($servername, $username, $password, $db);
+include_once 'database.php';
+include_once 'base.php';
 
 if (empty($_POST['uid']) || empty($_POST['table'])) {
     echo 'Informacion provista insuficiente';
     die;
 }
 
-$user_id = $_POST['uid'];
+$uid = $_POST['uid'];
 $table = $_POST['table'];
+$return = [];
 
 unset($_POST['uid']);
 unset($_POST['table']);
 
-$assignment_list = '';
-foreach ($_POST as $key => $value) {
+$objeto = new Base($_POST);
+$db = new Database();
 
-    if (!empty($value)) {
-        $assignment_list .= $key . '=\'' . $value . '\',';
-    }
-}
+$db->actualizarUser($objeto, $table);
 
-$assignment_list = rtrim($assignment_list, ',');
-
-if (empty($assignment_list)) {
-    echo 'Informacion actualizada con exito';    
+if ($db->error) {
     die;
+    $return['error'] = $db->error;
 }
 
-
-$sql = 'UPDATE '.$table.' SET ' . $assignment_list . ' WHERE uid=' . $user_id;
-
-if ($conn->query($sql)) {
-    echo 'Informacion actualizada con exito';
-} else {
-    echo 'Error actualizando la informacion de usuario';
-    die;
-}
+header('Content-Type: application/json');
+echo json_encode($return);

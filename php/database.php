@@ -32,12 +32,13 @@ class Database {
         return $this->conn->query($sql);
     }
 
-    public function actualizarUser (Base $objeto) { // TODO hacer obligatorio los campos de usuario
-        $sql = $this->updateString($objeto, 'users') . " WHERE " . $objeto->sql_id;
+    public function actualizarUser (Base $objeto, $tabla) { // TODO hacer obligatorio los campos de usuario
+        $sql = $this->updateString($objeto, $tabla) . " WHERE " . $objeto->sql_id();
         
         $result = $this->conn->query($sql);
 
         if (!$result) {
+            var_dump()
             $this->error = "Error actualizando el usuario";
         }
 

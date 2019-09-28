@@ -5,6 +5,7 @@ $surname = $GLOBALS['surname'];
 $birthdate = $GLOBALS['birthdate'];
 $nacionality = $GLOBALS['nacionality'];
 $description = $GLOBALS['description'];
+$id = $GLOBALS['id'];
 if (empty($name) && empty($surname)) {
     $complete_name = $GLOBALS['username'];
 } else {
@@ -48,7 +49,7 @@ $edicion = (isset($_GET['view']) && $_GET['view'] == 'user-edit');
         </div>
         <input type="text" class="w3-input form-slot" name="nacionality" placeholder="Nacionalidad: <?php echo $nacionality ?>">
         <input type="text" class="w3-input form-slot" name="description" placeholder="Descripcion: <?php echo $description ?>">
-        <button onclick="mandar_user_data()" 
+        <button onclick="mandar_user_data(<?php echo $id ?>)" 
             class="w3-btn w3-blue" style="float:right; margin-top:20px">
             <span id="terminar-text"> Terminar </span> 
             <i class="fa fa-spinner" style="display:none" id="waiting-spinner"></i>

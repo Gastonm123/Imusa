@@ -1,6 +1,7 @@
 <?php
 
 include_once 'base.php';
+include_once 'utils.php';
 
 class Usuario extends Base {
     public $username;
@@ -30,7 +31,8 @@ class Usuario extends Base {
     public function vistaFormulario() {
         # mostrar la plantilla de user
 
-        $username = $this->username;
+        global $id;
+        $id = get_user_id($this->db, $this->username);
 
         include '../views/usuarioForm.php';
     }
