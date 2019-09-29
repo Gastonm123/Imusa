@@ -1,0 +1,5 @@
+Como convertirte en hacker en 2 minutos:
+
+Cambiar en api la linea 20 para que en vez de decir $result diga $result->fetch_assoc()
+Lanzar el server local de php
+Buscar http://localhost:8080/php/api.php?comando=select&tabla=users&campos[]=username&campos[]=password&restricciones%5Bid%5D=1
