@@ -53,11 +53,17 @@ article div h2 {
 }
 
 .form-header {
-    height: 200px;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: auto;
+    width:100%;
+    z-index: 1;
+}
+
+.header {
     background-color: white;
+    height: 200px;
 }
 
 .header-image, .header-content {
@@ -104,4 +110,13 @@ article div h2 {
 .date-span {
     margin-top: -10px; 
     margin-left: -2px
+}
+
+.go-back {
+    float: left;
+    margin: 20px;
+    border-radius: 50%;
+    width: 25px;
+    display:flex;
+    justify-content: center;
 }

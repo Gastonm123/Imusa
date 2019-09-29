@@ -33,18 +33,31 @@ if (!$creacion) {
 <script src='../js/database.js'></script>
 </head> -->
 
-<div class="form-header w3-round">
-    <div style="display:flex">
-        <div class="header-image">
-            <img src="../img/logo_perro.png" style="width: 100px; height: 100px">
-        </div>
-        <div class="header-content">
-            <h3><?php echo $tag ?></h3>
-            <?php if ($edicion) : ?>
-                <button class="w3-btn w3-blue" onclick="alert('jajaja')">Cambiar foto</button>
-            <?php else : ?>
-                <button class='w3-btn w3-blue' onclick="location.href = './sesion.php?view=perro-edit&id=<?php echo $id?>'">Editar Perro</button>
-            <?php endif; ?>
+<div class="header w3-round">
+    <!-- <button class="go-back w3-blue w3-btn"> -->
+    <?php if ($creacion || !$edicion) : ?>
+        <a  class="go-back w3-blue w3-btn"
+            href="./sesion.php?view=perroTree"><i class="fa fa-arrow-left"></i></a>
+    <?php else: ?>
+        <a  class="go-back w3-blue w3-btn"
+            href="./sesion.php?view=perro&id=<?php echo $id ?>"><i class="fa fa-arrow-left"></i></a>
+    <?php endif; ?>
+    <!-- </div> -->
+    
+    <div class="form-header">
+    
+        <div style="display:flex">
+            <div class="header-image">
+                <img src="../img/logo_perro.png" style="width: 100px; height: 100px">
+            </div>
+            <div class="header-content">
+                <h3><?php echo $tag ?></h3>
+                <?php if ($edicion) : ?>
+                    <button class="w3-btn w3-blue" onclick="alert('jajaja')">Cambiar foto</button>
+                <?php else : ?>
+                    <button class='w3-btn w3-blue' onclick="location.href = './sesion.php?view=perro-edit&id=<?php echo $id?>'">Editar Perro</button>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </div>

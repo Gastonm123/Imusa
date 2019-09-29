@@ -22,18 +22,20 @@ $edicion = (isset($_GET['view']) && $_GET['view'] == 'user-edit');
 <link rel="stylesheet" href="../css/w3.css">
 </head> -->
 
-<div class="form-header w3-round">
-    <div style="display:flex">
-        <div class="header-image">
-            <img src="../img/usuario.png" style="width: 100px; height: 100px">
-        </div>
-        <div class="header-content">
-            <h3><?php echo $complete_name ?></h3>
-            <?php if ($edicion) : ?>
-                <button class="w3-btn w3-blue" onclick="alert('jajaja')">Cambiar foto</button>
-            <?php else : ?>
-                <button class='w3-btn w3-blue' onclick="location.href = './sesion.php?view=user-edit'">Editar Perfil</button>
-            <?php endif; ?>
+<div class="header w3-round">
+    <div class="form-header" style="height: 100%">
+        <div style="display:flex">
+            <div class="header-image">
+                <img src="../img/usuario.png" style="width: 100px; height: 100px">
+            </div>
+            <div class="header-content">
+                <h3><?php echo $complete_name ?></h3>
+                <?php if ($edicion) : ?>
+                    <button class="w3-btn w3-blue" onclick="alert('jajaja')">Cambiar foto</button>
+                <?php else : ?>
+                    <button class='w3-btn w3-blue' onclick="location.href = './sesion.php?view=user-edit'">Editar Perfil</button>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </div>

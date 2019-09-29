@@ -91,12 +91,12 @@ function obtener_perro($id)
 	$db = new Database();
 
 	$result = $db->obtener_objeto('perros', $campos, ['id'=>$id]);
-
+	
+	$db->cerrar();
 	if ($db->error) {
 		return ['error' => $db->error];
 	} else {
 		return $result;
 	}
 
-	$db->cerrar();
 }

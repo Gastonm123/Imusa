@@ -1,30 +1,33 @@
 // FUNCIONES USADAS EN LAS VISTAS DE USER
 function mandar_user_data(id) {
-    var data = {};
+    var values = {};
     var user_data = $('.form-slot');
 
-    // diff entre la data local y la data del servidor
     for (let i = 0; i < user_data.length; i++) {
-        let field = user_data[i];
-        if (field.value != server_values[field.name] && field.value != '') {
-            data[field.name] = field.value;
-        }
+        field = user_data[i];
+        values[field.name] = field.value;
     }
 
-    data['uid'] = id;
-    data['table'] = 'users_info';
-    
+    var data = {
+        'comando': 'update',
+        'tabla': 'users_info',
+        'values': values,
+        'restricciones': {'uid':id}
+    };
+
     $("#waiting-spinner").css('display', 'inline-block');
     $("#terminar-text").css('display', 'none');
     $("#waiting-spinner").addClass('w3-spin');
-    $.post('update_user_data.php', data,
+    $.post('api.php', data,
         function (a,b,c) {
-            if (a != '') {
-                alert(a);
+            if (a['error']) {
+                alert(a['error']);
+            } else {
+                console.log(a['value']);
             }
 
             location.href = './sesion.php?view=user';
-    })
+        })
 }
 
 // FUNCIONES USADAS EN LAS VISTAS DE PERRO
@@ -39,7 +42,7 @@ function crear_perro() {
 
     var data = {
         'comando': 'create',
-        'table': 'perro',
+        'tabla': 'perros',
         'values': values 
     };
 
@@ -65,7 +68,7 @@ function actualizar_perro(id) {
 
     var data = {
         'comando': 'update',
-        'table': 'perros',
+        'tabla': 'perros',
         'values': values,
         'restricciones': {'id': id}
     };
@@ -103,14 +106,18 @@ function setear(usuario, permiso, rol) {
 function guardar() {
     cambios.forEach((element, index) => {
         var data = {
-            'uid': index,
-            'table': 'permissions',
-            'rol': element
-        }
+            'comando': 'update',
+            'tabla': 'users_info',
+            'values': {'rol': element},
+            'restricciones': {'uid': index}
+        };
 
-        $.post('update_user_data.php', data, function(a,b,c){
-            console.log("actualizada info del user " + index);
-            console.log(a);
+        $.post('api.php', data, function(a,b,c){
+            if (a['error']) {
+                alert(a);
+            } else {
+                console.log(a['value']);
+            }
         })
     });
 

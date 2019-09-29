@@ -12,7 +12,7 @@ $db = new Database();
 $response = [];
 
 if ($data['comando'] == 'select') {
-    $result = $db->obtener_objeto('perros', $data['campos'], $data['restricciones']);
+    $result = $db->obtener_objeto($data['tabla'], $data['campos'], $data['restricciones']);
 
     if ($db->error) {
         $response['error'] = $db->error;
@@ -22,7 +22,7 @@ if ($data['comando'] == 'select') {
 }
 
 if ($data['comando'] == 'create') {
-    $result = $db->crear_objeto('perros', $data['values']);
+    $result = $db->crear_objeto($data['tabla'], $data['values']);
 
     if ($db->error) {
         $response['error'] = $db->error;
@@ -38,7 +38,7 @@ if ($data['comando'] == 'create') {
 }
 
 if ($data['comando'] == 'update') {
-    $result = $db->actualizar_objeto('perros', $data['values'], $data['restricciones']);
+    $result = $db->actualizar_objeto($data['tabla'], $data['values'], $data['restricciones']);
 
     if ($db->error) {
         $response['error'] = $db->error;

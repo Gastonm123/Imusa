@@ -32,19 +32,6 @@ class Database {
         return $this->conn->query($sql);
     }
 
-    public function actualizarUser (Base $objeto, $tabla) { // TODO hacer obligatorio los campos de usuario
-        $id = $objeto->getId();
-        $sql = $this->updateString($objeto, $tabla, ['id'=>$id]);
-        
-        $result = $this->conn->query($sql);
-
-        if (!$result) {
-            $this->error = "Error actualizando el usuario";
-        }
-
-        return $result;
-    }
-
     public function drop() {
         foreach ($this->objetos as $objeto) {
             if ($objeto->drop() == FALSE) {
