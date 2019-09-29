@@ -106,21 +106,6 @@ class Database {
         return $result;
     }
 
-
-    public function obtenerUserInfo($id) {
-        $sql = "SELECT name, surname, birthdate, nacionality, description, rol 
-            FROM users_info WHERE uid = $id";
-
-        $result = $this->conn->query($sql);
-
-        if ($result == FALSE || $result->num_rows != 1) {
-            $this->error = "Error accediendo a la informacion del usuario";
-            return;
-        }
-
-        return $result->fetch_assoc();
-    }
-
     public function getUser($fields) {
         $where = $this->whereString($fields);
         $sql = "SELECT id, username, email 

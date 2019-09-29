@@ -11,10 +11,11 @@ $admin = new Usuario(['username'=>'admin', 'password'=>'admin']);
 
 $db->crearUser($admin);
 
+if ($db->error) {
+    echo $db->error;
+}
 
-$adminInfo = new UsuarioInfo(["rol"=>"admin", "id" => 1]);
-
-$db->actualizarUserInfo($adminInfo);
+$db->actualizar_objeto('users_info', ['rol'=>'admin'], ['uid'=>1]);
 
 if ($db->error) {
     echo $db->error;

@@ -346,9 +346,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			<?php else : ?>
 				<?php 
 					$user_id = get_user_id($db, $_COOKIE['user']);
-					$result = $db->obtenerUserInfo($user_id);
+					$result = $db->obtener_objeto('users_info', ['rol'], ["uid"=>$user_id]);
 
 					if ($db->error == FALSE) {
+						$result = $result->fetch_assoc();
 						$name = $result['name'];
 						$surname = $result['surname'];
 						$birthdate = $result['birthdate'];

@@ -63,10 +63,10 @@ function format_input($data)
 
 function get_user_id($db, $user) 
 {
-	$result = $db->getUser(['username'=>$user]);
+	$result = $db->obtener_objeto('users', ['id'], ['username'=>$user]);
 
 	if ($db->error == FALSE) {
-		return $result['id'];
+		return $result->fetch_assoc()['id'];
 	} else {
 		return FALSE;
 	}
@@ -76,18 +76,17 @@ function get_user_permission($db, $user)
 {
 	$id = get_user_id($db, $user);
 
-	$result = $db->obtenerUserInfo($id);
+	$result = $db->obtener_objeto('users_info', ['rol'], ["uid"=>$id]);
 
 	if ($db->error == FALSE) {
-		return $result['rol'];
+		return $result->fetch_assoc()['rol'];
 	} else {
-		echo $db->error;
 		return FALSE;
 	}
 }
 
 function obtener_perro($id) 
-{ # TODO terminar esto
+{
 	$campos = ['jaula','sexo','raza','adoptabilidad','edad','observaciones'];
 	$db = new Database();
 

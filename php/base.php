@@ -3,7 +3,7 @@
 include_once 'utils.php';
 
 class Base {
-    protected $id;
+    public $id;
     
     public function __construct(array $attributes = []) {
         foreach ($attributes as $key => $value) {
@@ -17,11 +17,6 @@ class Base {
 
     public function getId() {
         return $this->id;
-    }
-
-    public function sql_id() {
-        $id = $this->id;
-        return "id='$id'";
     }
 
     public function setId($id) {
