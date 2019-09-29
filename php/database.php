@@ -33,7 +33,8 @@ class Database {
     }
 
     public function actualizarUser (Base $objeto, $tabla) { // TODO hacer obligatorio los campos de usuario
-        $sql = $this->updateString($objeto, $tabla) . " WHERE " . $objeto->sql_id();
+        $id = $objeto->getId();
+        $sql = $this->updateString($objeto, $tabla, ['id'=>$id]);
         
         $result = $this->conn->query($sql);
 
@@ -145,10 +146,64 @@ class Database {
         return $this->conn->query($sql);
     }
 
-    private function lastId() {
+    public function lastId() {
         $result = $this->conn->query("SELECT LAST_INSERT_ID()");
         $arr = $result->fetch_assoc();
 
         return $arr['LAST_INSERT_ID()'];
+    }
+
+    public function obtener_objeto($tabla, $campos, $restricciones) {
+        $arr = [];
+        foreach ($campos as $campo) {
+            $arr[$campo] = 10;
+        }
+
+        $objeto = new Base($arr);
+
+        $sql = $this->selectString($objeto, $tabla, $restricciones);
+        $result = $this->query($sql);
+
+        if ($result == false) {
+            $this->error = "Error obteniendo informacion de la tabla $tabla";
+        }
+
+        return $result;
+    }
+
+    public function crear_objeto($tabla, $valores) {
+        $arr = [];
+        foreach ($valores as $key=>$value) {
+            $arr[$key] = $value;
+        }
+
+        $objeto = new Base($arr);
+
+        $sql = $this->insertString($objeto, $tabla);
+        $result = $this->query($sql);
+
+        if ($result == false) {
+            $this->error = "Error creando un objeto en la tabla $tabla";
+        }
+
+        return $result;
+    }
+
+    public function actualizar_objeto($tabla, $valores, $restricciones) {
+        $arr = [];
+        foreach ($valores as $key=>$value) {
+            $arr[$key] = $value;
+        }
+
+        $objeto = new Base($arr);
+
+        $sql = $this->updateString($objeto, $tabla, $restricciones);
+        $result = $this->query($sql);
+
+        if ($result == false) {
+            $this->error = "Error creando un objeto en la tabla $tabla";
+        }
+
+        return $result;
     }
 }

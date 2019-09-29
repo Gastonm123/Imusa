@@ -1,5 +1,8 @@
 <?php
 
+include_once 'database.php';
+include_once 'base.php';
+
 function getOffset() 
 {
 	if (empty($_GET['offset'])) {
@@ -11,7 +14,7 @@ function getOffset()
 	return $offset;
 }
 
-function vistaOffset($result) 
+function vistaOffset($result, $vista) 
 {
 	$offset = getOffset();
 
@@ -22,11 +25,11 @@ function vistaOffset($result)
 			$offset_msg = '&offset='.($offset-10);
 		}
 
-		echo '<a href="./sesion.php?view=accounts'.$offset_msg.'"><i class="fa fa-chevron-left icon"></i></a>';
+		echo "<a href='./sesion.php?view=$vista".$offset_msg."'><i class='fa fa-chevron-left icon'></i></a>";
 	}
 	echo $offset.'/'.($offset+10);
 	if ($result->num_rows == 10) {
-		echo '<a href="./sesion.php?view=accounts&offset='.($offset+10).'"><i style="margin-left:6px" class="fa fa-chevron-right icon"></i></a>';
+		echo "<a href='./sesion.php?view=$vista&offset=".($offset+10)."'><i style='margin-left:6px' class='fa fa-chevron-right icon'></i></a>";
 	}
 }
 
@@ -81,4 +84,20 @@ function get_user_permission($db, $user)
 		echo $db->error;
 		return FALSE;
 	}
+}
+
+function obtener_perro($id) 
+{ # TODO terminar esto
+	$campos = ['jaula','sexo','raza','adoptabilidad','edad','observaciones'];
+	$db = new Database();
+
+	$result = $db->obtener_objeto('perros', $campos, ['id'=>$id]);
+
+	if ($db->error) {
+		return ['error' => $db->error];
+	} else {
+		return $result;
+	}
+
+	$db->cerrar();
 }

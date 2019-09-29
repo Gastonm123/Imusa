@@ -1,7 +1,7 @@
 <?php
 
 trait sql_base {
-    private function updateString(Base $object, $table) {
+    private function updateString(Base $object, $table, $restricciones) {
         $fields = '';
 
         foreach ($object as $key => $value) {
@@ -14,8 +14,8 @@ trait sql_base {
 
         $fields = rtrim($fields, ',');
 
-        $id = $object->getId();
-        $sql = "UPDATE $table SET $fields";
+        $where = $this->whereString($restricciones);
+        $sql = "UPDATE $table SET $fields WHERE $where";
 
         return $sql;
     }
@@ -58,8 +58,26 @@ trait sql_base {
         $fields = rtrim($fields, ',');
         $values = rtrim($values, ',');
 
-        $id = $object->getId();
         $sql = "INSERT INTO $table ($fields) VALUES ($values)";
+
+        return $sql;
+    }
+
+    private function selectString(Base $object, $table, $restricciones) {
+        $keys = "";
+
+        foreach ($object as $key => $value) {
+            if (empty($value)) {
+                continue;
+            }
+            
+            $keys .= "$key,";
+        }
+
+        $keys = rtrim($keys, ',');
+        $where = $this->whereString($restricciones);
+
+        $sql = "SELECT $keys FROM $table WHERE $where";
 
         return $sql;
     }

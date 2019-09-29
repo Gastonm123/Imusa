@@ -1,3 +1,4 @@
+// FUNCIONES USADAS EN LAS VISTAS DE USER
 function mandar_user_data(id) {
     var data = {};
     var user_data = $('.form-slot');
@@ -26,7 +27,60 @@ function mandar_user_data(id) {
     })
 }
 
-// dropdown managment
+// FUNCIONES USADAS EN LAS VISTAS DE PERRO
+function crear_perro() {
+    var values = {};
+    var user_data = $('.form-slot');
+
+    for (let i = 0; i < user_data.length; i++) {
+        field = user_data[i];
+        values[field.name] = field.value;
+    }
+
+    var data = {
+        'comando': 'create',
+        'table': 'perro',
+        'values': values 
+    };
+
+    $.post('api.php', data,
+        function(a,b,c) {
+            if (a['error']) {
+                alert(a['error']);
+            } else {
+                var id = a['value'];
+                location.href = './sesion.php?view=perro&id='+id;
+            }
+    })
+}
+
+function actualizar_perro(id) {
+    var values = {};
+    var user_data = $('.form-slot');
+
+    for (let i = 0; i < user_data.length; i++) {
+        field = user_data[i];
+        values[field.name] = field.value;
+    }
+
+    var data = {
+        'comando': 'update',
+        'table': 'perros',
+        'values': values,
+        'restricciones': {'id': id}
+    };
+
+    $.post('api.php', data,
+        function(a,b,c) {
+            if (a['error']) {
+                alert(a['error']);
+            } else {
+                location.href = './sesion.php?view=perro&id='+id;
+            }
+    })
+}
+
+// FUNCIONES USADAS EN EL DROPDOWN DE USUARIO
 function setear(usuario, permiso, rol) {
     var accounts = $('.account');
     var account_id = +accounts[usuario].children[0].innerHTML;

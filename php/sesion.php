@@ -220,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				</a>
 				<?php if (get_user_permission($db, $_COOKIE['user']) == 'admin') : ?>
 					<a href='./sesion.php?view=accounts' class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
-						<i class="fa fa-users icon"></i>ACCOUNTS
+						<i class="fa fa-users icon"></i>CUENTAS
 					</a>
 				<?php endif; ?>
 				<a href="./sesion.php?view=perroTree" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
@@ -271,7 +271,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					<span style="float:right"> 
 					<?php
 					# flechitas
-					vistaOffset($result);
+					vistaOffset($result, 'accounts');
 					?>
 					</span>
 
@@ -305,7 +305,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					</div>
 
 					<div class="w3-padding">
-						<a href="./sesion.php?view=perro" class="w3-btn w3-blue">Ingresar perro</a>
+						<a href="./sesion.php?view=perro-edit" class="w3-btn w3-blue">Ingresar perro</a>
 					</div>
 					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0">
 						<?php
@@ -320,7 +320,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					<span style="float:right"> 
 					<?php
 					# flechitas
-					vistaOffset($result);
+					vistaOffset($result, 'perroTree');
 					?>
 					</span>
 				</div>
