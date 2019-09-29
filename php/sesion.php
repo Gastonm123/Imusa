@@ -347,6 +347,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				<?php 
 					$user_id = get_user_id($db, $_COOKIE['user']);
 					$result = $db->obtener_objeto('users_info', ['name', 'surname', 'birthdate', 'nacionality', 'description'], ["uid"=>$user_id]);
+					$username = $_COOKIE['user'];
 
 					if ($db->error == FALSE) {
 						$result = $result->fetch_assoc();
