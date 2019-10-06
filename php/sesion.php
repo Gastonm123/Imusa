@@ -12,8 +12,6 @@ if ($db->error) {
 	die;
 }
 
-// TODO morir si la instancia db no fue creada bien
-
 $user = $password = '';
 $GLOBALS['errores'] = [];
 
@@ -64,6 +62,10 @@ if (!isset($_COOKIE['user']) && $_SERVER["REQUEST_METHOD"] == 'POST') {
 
 		setcookie('errores', $result, time() + 20);
 	}
+} else if (isset($_COOKIE['user'])) {
+	$user_permission = get_user_permission($db, $_COOKIE['user']);
+} else {
+	$user_permission = 'anonymous';
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -218,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				<a href="./sesion.php?view=user" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 					<i class="fa fa-user icon"></i>USUARIO
 				</a>
-				<?php if (get_user_permission($db, $_COOKIE['user']) == 'admin') : ?>
+				<?php if ($user_permission == 'admin') : ?>
 					<a href='./sesion.php?view=accounts' class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 						<i class="fa fa-users icon"></i>CUENTAS
 					</a>
@@ -245,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 						<p>Praesent at leo sit amet dolor sagittis mattis. Cras blandit dictum sem, quis mattis ligula lacinia sit amet. Aenean aliquet cursus fermentum. Donec porta enim sit amet felis ullamcorper volutpat. Donec tristique mi eget enim sollicitudin tempus. Aliquam sollicitudin purus vitae tortor ullamcorper, et posuere enim auctor. Nunc at felis tempus, mattis justo non, efficitur nisl. Pellentesque vitae pellentesque sapien. Quisque neque purus, rhoncus a volutpat eu, euismod id leo.</p>
 					</div>	
 				</div>
-			<?php elseif (get_user_permission($db, $_COOKIE['user']) == 'admin' && $_GET['view'] == 'accounts') : ?> 
+			<?php elseif ($user_permission == 'admin' && $_GET['view'] == 'accounts') : ?> 
 				<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: auto; text-align:justify">
 					<div style="display:flex; justify-content:center; margin-bottom:20px">
 						<h2>
@@ -297,6 +299,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 								}
 							});
 						}
+
+						var usuarios = $('.account');
+						
+						usuarios.each((index, usuario) => {
+							usuario.onclick = function(){
+								location.href = './sesion.php?view=user&id=' + usuario.id;
+							}
+						});
 					</script>
 				</div>
 			<?php elseif ($_GET['view'] == 'perroTree') : ?>
@@ -308,9 +318,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					</div>
 
 					<div class="w3-padding" id="button_pad">
-						<a href="./sesion.php?view=perro-edit" class="w3-btn w3-blue">Ingresar perro</a>
-						<button onclick="cambiar_modo()" class="w3-btn w3-blue">Sacar perro</button>
+						<?php if ($user_permission == 'admin') : ?>
+							<a href="./sesion.php?view=perro-edit" class="w3-btn w3-blue">Ingresar perro</a>
+							<button onclick="cambiar_modo()" class="w3-btn w3-blue">Sacar perro</button>
+						<?php else : ?>
+							<button onclick="alert('xd')" class="w3-btn w3-blue">Adoptar perro</button>	
+						<?php endif; ?>
 					</div>
+					
 					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0">
 						<?php
 						$offset = getOffset();
@@ -338,7 +353,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 						}
 					});
 				</script>
-			<?php elseif ($_GET['view'] == 'perro' || $_GET['view'] == 'perro-edit') : ?>
+			<?php elseif ($user_permission == 'admin' && ($_GET['view'] == 'perro' || $_GET['view'] == 'perro-edit')) : ?>
 			<!-- VISTA PERRO -->
 				<script src="../js/perro.js"></script>
 
@@ -351,10 +366,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				</div>
 			<?php else : ?>
 				<?php 
-					$user_id = get_user_id($db, $_COOKIE['user']);
-					$result = $db->obtener_objeto('users_info', ['name', 'surname', 'birthdate', 'nacionality', 'description'], ["uid"=>$user_id]);
-					$username = $_COOKIE['user'];
+					if ($user_permission == 'admin' && isset($_GET['id'])) {
+						$user_id = $_GET['id'];
+					} else {
+						$user_id = get_user_id($db, $_COOKIE['user']);
+					}
 
+					$result = $db->obtener_objeto('users_info', ['name', 'surname', 'birthdate', 'nacionality', 'description'], ["uid"=>$user_id]);
+					
 					if ($db->error == FALSE) {
 						$result = $result->fetch_assoc();
 						$name = $result['name'];
@@ -362,7 +381,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 						$birthdate = $result['birthdate'];
 						$nacionality = $result['nacionality'];
 						$description = $result['description'];
-						$arr = [
+						$arr = [ // TODO borrar esto que feo por dios
 							'name' => $name, 
 							'surname' => $surname, 
 							'birthdate' => $birthdate, 
@@ -372,9 +391,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					} else {
 						echo '
 						<script>
-							alert(\'No se ha podido cargar el perfil de usuario\');
-							location.href = \'./sesion.php\'
+						alert(\'No se ha podido cargar el perfil de usuario\');
+						location.href = \'./sesion.php\'
 						</script>';
+					}
+
+					$username = $db->obtener_objeto('users', ['username'], ['id'=>$user_id]);
+
+					if ($db->error == FALSE) {
+						$username = $username->fetch_array()[0];
+					} else {
+						echo "<script>
+						alert('No se ha podido cargar el perfil de usuario');
+						location.href = './sesion.php'
+						</script>";
 					}
 				?>
 
@@ -393,7 +423,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 					<div class="w3-pale-yellow w3-round w3-padding user-view">
 						<?php 
-							$usuario = new Usuario(['db' => $db, 'username' => $_COOKIE['user']]);
+							$usuario = new Usuario(['db' => $db, 'id' => $user_id]);
 
 							$usuario->vistaFormulario();
 						?>

@@ -66,7 +66,7 @@ class Perro extends Base
                 $row = $result->fetch_row();
 
                 if (isset($row)) {
-                    $id = $cont+1;
+                    $id = $row[0];
                     echo "<tr class='account' id='$id'>";
 
                     foreach ($row as $data) {

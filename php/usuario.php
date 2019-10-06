@@ -31,8 +31,8 @@ class Usuario extends Base {
     public function vistaFormulario() {
         # mostrar la plantilla de user
 
-        global $id;
-        $id = get_user_id($this->db, $this->username);
+        global $id, $db;
+        $id = $this->id;
 
         include '../views/usuarioForm.php';
     }
@@ -42,9 +42,9 @@ class Usuario extends Base {
 						
         if (isset($result) && $this->db->error == FALSE) {
             $cont_column = 0;
-            echo '<tr class="w3-green">';
+            echo '<thead class="w3-green">';
             while ($field = $result->fetch_field()) {
-                echo '<th>' . $field->name . '</th>';
+                echo '<td>' . $field->name . '</td>';
                 
                 if ($field->name == 'rol') {
                     # seteo la variable en result por q al final lo devuelvo como
@@ -54,14 +54,15 @@ class Usuario extends Base {
 
                 $cont_column++;
             }
-            echo '</tr>';
+            echo '</thead>';
             
             echo '<tbody>';
             for ($cont=0; $cont < 10; $cont++) { 
                 $row = $result->fetch_row();
 
                 if (isset($row)) {
-                    echo '<tr class=\'account\'>';
+                    $id = $row[0];
+                    echo "<tr class='account' id='$id'>";
                     
                     $cont_column = 0;
                     foreach ($row as $data) {
