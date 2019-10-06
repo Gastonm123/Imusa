@@ -26,8 +26,12 @@ function mandar_user_data(id) {
                 console.log(a['value']);
             }
 
-            location.href = './sesion.php?view=user';
-        })
+            if (location.href.indexOf('&id') != -1) {
+                location.href = './sesion.php?view=user&id=' + id;
+            } else {
+                location.href = './sesion.php?view=user';
+            }
+    })
 }
 
 // FUNCIONES USADAS EN EL DROPDOWN DE USUARIO
