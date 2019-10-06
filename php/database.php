@@ -5,6 +5,7 @@ include_once 'usuarioInfo.php';
 include_once 'base.php';
 include_once 'sql_base.php';
 include_once 'perro.php';
+include_once 'mensaje.php';
 
 class Database {
     protected $conn;
@@ -17,7 +18,8 @@ class Database {
         $this->objetos = [
             new Usuario(['db' => $this]),
             new UsuarioInfo(['db' => $this]),
-            new Perro(['db' => $this])
+            new Perro(['db' => $this]),
+            new Mensaje(['db' => $this])
         ];
 
         foreach ($this->objetos as $objeto) {

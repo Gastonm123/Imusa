@@ -15,7 +15,11 @@ trait sql_base {
         $fields = rtrim($fields, ',');
 
         $where = $this->whereString($restricciones);
-        $sql = "UPDATE $table SET $fields WHERE $where";
+        $sql = "UPDATE $table SET $fields";
+
+        if ($where != '') {
+            $sql .= " WHERE $where";
+        }
 
         return $sql;
     }
@@ -25,6 +29,10 @@ trait sql_base {
 
         foreach ($fields as $key => $value) {
             // TODO poner hash al value si la key es password
+            if (empty($value)) {
+                continue;
+            }
+            
             if ($key == 'password') {
                 $string .= "$key=SHA1('$value') AND ";
             } else {
@@ -77,7 +85,11 @@ trait sql_base {
         $keys = rtrim($keys, ',');
         $where = $this->whereString($restricciones);
 
-        $sql = "SELECT $keys FROM $table WHERE $where";
+        $sql = "SELECT $keys FROM $table";
+
+        if ($where != '') {
+            $sql .= " WHERE $where";
+        }
 
         return $sql;
     }
@@ -85,6 +97,10 @@ trait sql_base {
     private function deleteString($table, $restricciones) {
         $where = $this->whereString($restricciones);
         $sql = "DELETE FROM $table WHERE $where";
+
+        if ($where != '') {
+            $sql .= " WHERE $where";
+        }
 
         return $sql;
     }

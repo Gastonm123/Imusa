@@ -1,27 +1,20 @@
 <?php
-// TODO agregar la opcion de que los admins cambien las contrasenias, usuarios y emails de los usuarios 
-
-// esta plantilla requiere de la existencia de las siguientes variables globales
 $id = $GLOBALS['id'];
+$mensaje = $GLOBALS['mensaje'];
 
-$name = $GLOBALS['name'];
-$surname = $GLOBALS['surname'];
-$birthdate = $GLOBALS['birthdate'];
-$nacionality = $GLOBALS['nacionality'];
-$description = $GLOBALS['description'];
-if (empty($name) && empty($surname)) {
-    $complete_name = $GLOBALS['username'];
-} else {
-    $complete_name = "$name $surname";
-}
-$edicion = (isset($_GET['view']) && $_GET['view'] == 'user-edit');
-// ademas para una visualizacion correcta se deben incluir los archivos w3.css, sesion.css
-?>
+$emisor = $mensaje['emisor'];
+$destinatario = $mensaje['destinatario'];
+$asunto = $mensaje['asunto'];
+$contenido = $mensaje['contenido'];
+
+$edicion = (isset($_GET['view']) && $_GET['view'] == 'mensajeEdit');
+?>  
 
 <!-- <head>
     <link rel="stylesheet" href="../css/sesion.css">
     <link rel="stylesheet" href="../css/w3.css">
 </head> -->
+
 <div class="header w3-round">
     <?php if ($edicion) : ?>
         <a  class="go-back w3-blue w3-btn"

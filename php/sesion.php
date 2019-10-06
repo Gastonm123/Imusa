@@ -228,6 +228,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				<a href="./sesion.php?view=perroTree" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 					<i class="fa fa-paw icon"></i>MASCOTAS
 				</a>
+				<?php if ($user_permission == 'admin') : ?>
+					<a href="./sesion.php?view=mensajeTree" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
+						<i class="fa fa-envelope icon"></i>MENSAJES
+					</a>
+				<?php else : ?>
+					<a href="./sesion.php?view=mensajeEdit" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
+						<i class="fa fa-envelope icon"></i>MENSAJES
+					</a>
+				<?php endif; ?>
 				<button onclick='cerrar_cuenta()' class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
 					<i class="fa fa-sign-out icon"></i>CERRAR SESION
 				</button>
@@ -364,6 +373,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 							$perro->vistaFormulario();
 						?>
 				</div>
+			<?php elseif ($user_permission == 'admin' && $_GET['view'] == 'mensaje') : ?>
+			<!-- VISTA MENSAJE -->
+				<div class="w3-pale-yellow w3-round w3-padding user-view">
+					<?php
+						$id = $_GET['id'];
+
+						$objeto = new Mensaje(['db' => $db, 'id' => $id]);
+						
+						$objeto->vistaFormulario();
+					?>
+				</div>
+			<?php elseif ($_GET['view'] == 'mensajeEdit') : ?>
+			<!-- VISTA MENSAJE NUEVO -->
+				
+			<?php elseif ($user_permission == 'admin' && $_GET['view'] == 'mensajeTree') : ?>
+				
 			<?php else : ?>
 				<?php 
 					if ($user_permission == 'admin' && isset($_GET['id'])) {
