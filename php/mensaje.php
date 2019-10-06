@@ -1,21 +1,24 @@
 <?php
 
 include_once 'base.php';
+include_once 'usuario.php';
 
 class Mensaje extends Base {
     public $emisor;
-    public $destinatario;
-    public $mensaje;
+    public $tipo;
+    public $contenido;
+    public $asunto;
 
     public function init() {
         $sql = "CREATE TABLE IF NOT EXISTS mensajes(
             id INT NOT NULL AUTO_INCREMENT,
             emisor VARCHAR(20) NOT NULL,
-            destinatario VARCHAR(20) NOT NULL,
-            asunto VARCHAR(20), 
+            tipo VARCHAR(20) NOT NULL,
+            asunto TINYTEXT, 
             contenido TEXT,
             PRIMARY KEY (id)
         )"; 
+            // destinatario VARCHAR(20) NOT NULL,
         // asunto es utilizado por el backend para especificar 
         // mensajes o solicitudes de adopcion
 
@@ -31,8 +34,10 @@ class Mensaje extends Base {
     public function vistaFormulario() {
         global $id;
         global $mensaje;
+        global $username;
 
         $id = $this->id;
+        $username = $_COOKIE['user'];
         $mensaje = $this->obtenerMensaje();
 
         if ($this->db->error != FALSE) {
@@ -43,7 +48,11 @@ class Mensaje extends Base {
     }
 
     public function obtenerMensaje() {
-        $mensaje = $this->db->obtener_objeto('mensajes', ['destinatario', 'emisor', 'asunto', 'contenido'], ['id' => $this->id]);
+        if (empty($this->id)) {
+            return [];
+        }
+
+        $mensaje = $this->db->obtener_objeto('mensajes', ['tipo', 'emisor', 'asunto', 'contenido'], ['id' => $this->id]);
 
         if ($mensaje->num_rows > 1 || $this->db->error != False) {
             $this->db->error = "Error obteniendo mensaje";
@@ -54,7 +63,7 @@ class Mensaje extends Base {
 
     public function vistaArbol() {
         // obtener mensajes y mostrarlos
-        $mensajes = $this->db->obtener_objeto('mensajes', ['emisor', 'asunto'], []);
+        $mensajes = $this->db->obtener_objeto('mensajes', ['id', 'emisor', 'tipo', 'asunto'], []);
 
         if (isset($mensajes) && $this->db->error == FALSE) {
             $cont_column = 0;

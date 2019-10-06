@@ -3,9 +3,17 @@ $id = $GLOBALS['id'];
 $mensaje = $GLOBALS['mensaje'];
 
 $emisor = $mensaje['emisor'];
-$destinatario = $mensaje['destinatario'];
+$tipo = $mensaje['tipo'];
 $asunto = $mensaje['asunto'];
 $contenido = $mensaje['contenido'];
+
+if (empty($tipo)) {
+    $tipo = 'MENSAJE';
+}
+
+if (empty($emisor)) {
+    $emisor = $GLOBALS['username'];
+}
 
 $edicion = (isset($_GET['view']) && $_GET['view'] == 'mensajeEdit');
 ?>  
@@ -17,38 +25,30 @@ $edicion = (isset($_GET['view']) && $_GET['view'] == 'mensajeEdit');
 
 <div class="header w3-round">
     <?php if ($edicion) : ?>
-        <a  class="go-back w3-blue w3-btn"
-            href="./sesion.php?view=user"><i class="fa fa-arrow-left"></i></a>
-    <?php else: ?>
         <a  class="go-back w3-blue w3-btn" style="visibility:hidden"
-            href="./sesion.php?view=user"><i class="fa fa-arrow-left"></i></a>
+            href="./sesion.php?view=mensaje"><i class="fa fa-arrow-left"></i></a>
+    <?php else: ?>
+        <a  class="go-back w3-blue w3-btn"
+            href="./sesion.php?view=mensajeTree"><i class="fa fa-arrow-left"></i></a>
     <?php endif; ?>
 
 
     <div class="form-header">
-        <div style="display:flex">
+        <div style="display:flex; align-items:center">
             <div class="header-image">
-                <img src="../img/usuario.png" style="width: 100px; height: 100px">
+                <img src="../img/mail.png" style="width: 100px; height: 70px">
             </div>
             <div class="header-content">
-                <h3><?php echo $complete_name ?></h3>
                 <?php if ($edicion) : ?>
-                    <button class="w3-btn w3-blue" onclick="alert('jajaja')">Cambiar foto</button>
+                    <span style="font-size:20px">Tipo</span> <br>
+                    <h3 style="color:#2196f3; margin:0"><?php echo $tipo ?></h3> 
                 <?php else : ?>
                     <?php if ($GLOBALS['user_permission'] == 'admin' && isset($_GET['id'])) : ?>
+                        <h3 style="margin:0"><?php echo $tipo ?></h3>
                         <button class='w3-btn w3-blue' 
-                            onclick="location.href='./sesion.php?view=user-edit&id=<?php echo $_GET['id'] ?>'">
-                            Editar Perfil
-                        </button>
-                        <button class="w3-btn w3-blue"
-                            onclick="alert('Aca vas a poder cambiar contrasenia, usuario, email.. Algun dia')">
-                            Configuracion
-                        </button>
-                    <?php else : ?>
-                        <button class='w3-btn w3-blue' 
-                            onclick="location.href='./sesion.php?view=user-edit'">
-                            Editar Perfil
-                        </button>
+                            onclick="location.href='./sesion.php?view=mensajeEdit&id=<?php echo $id ?>'">
+                            Editar Mensaje
+                        </button>                  
                     <?php endif; ?>
                 <?php endif; ?>
             </div>
@@ -58,40 +58,33 @@ $edicion = (isset($_GET['view']) && $_GET['view'] == 'mensajeEdit');
 
 <div class="form-content w3-round">
     <?php if ($edicion) : ?>
-        <input type="text" class="w3-input form-slot" name="name" placeholder="Nombre: <?php echo $name ?>">
-        <input type="text" class="w3-input form-slot" name="surname" placeholder="Apellido: <?php echo $surname ?>">
-        <div class="w3-input date-container">
-            <span class="date-span">
-                Fecha Nacimiento: <input type="date" class="form-slot no-input" name="birthdate" value="<?php echo $birthdate ?>">
-            </span>
-        </div>
-        <input type="text" class="w3-input form-slot" name="nacionality" placeholder="Nacionalidad: <?php echo $nacionality ?>">
-        <input type="text" class="w3-input form-slot" name="description" placeholder="Descripcion: <?php echo $description ?>">
-        <button onclick="mandar_user_data(<?php echo $id ?>)" 
+    <input type="text" class="w3-input form-slot" name="asunto" placeholder="Asunto: <?php echo $asunto ?>">
+    <input type="text" class="w3-input form-slot" name="contenido" placeholder="Contenido: <?php echo $contenido ?>">
+    <input type="text" class="w3-input form-slot" name="emisor" style="display:none" value="<?php echo $emisor ?>">
+    <input type="text" class="w3-input form-slot" name="tipo" style="display:none" value="<?php echo $tipo ?>">
+        
+        <?php if (isset($id)) : ?>
+        <button onclick="actualizar_mensaje(<?php echo $id ?>)" 
             class="w3-btn w3-blue" style="float:right; margin-top:20px">
+        <?php else : ?>
+        <button onclick="crear_mensaje()" id="btn-container"
+            class="w3-btn w3-blue" style="float:right; margin-top:20px">
+        <?php endif; ?>
             <span id="terminar-text"> Terminar </span> 
             <i class="fa fa-spinner" style="display:none" id="waiting-spinner"></i>
         </button>
     <?php else : ?>
         <div class="w3-input form-slot">
-            <span style="float: left">Nombre</span>
-            <span style="float:right"><?php echo $name ?></span>
+            <span style="float: left">Emisor</span>
+            <span style="float:right"><?php echo $emisor ?></span>
         </div>
         <div class="w3-input form-slot">
-            <span style="float: left">Apellido</span>
-            <span style="float:right"><?php echo $surname ?></span>
+            <span style="float: left">Asunto</span>
+            <span style="float:right"><?php echo $asunto ?></span>
         </div>
         <div class="w3-input form-slot">
-            <span style="float: left">Cumpleaños</span>
-            <span style="float:right"><?php echo $birthdate ?></span>
-        </div>
-        <div class="w3-input form-slot">
-            <span style="float: left">Nacionalidad</span>
-            <span style="float:right"><?php echo $nacionality ?></span>
-        </div>
-        <div class="w3-input form-slot">
-            <span style="float:left">Descripcion</span>
-            <span style="float:right"><?php echo $description ?></span>
+            <span style="float: left">Contenido</span>
+            <span style="float:right"><?php echo $contenido ?></span>
         </div>
     <?php endif; ?>
 </div>

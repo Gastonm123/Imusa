@@ -335,7 +335,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 						<?php endif; ?>
 					</div>
 					
-					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0">
+					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0;margin-bottom">
 						<?php
 						$offset = getOffset();
 
@@ -373,29 +373,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 							$perro->vistaFormulario();
 						?>
 				</div>
-			<?php elseif ($user_permission == 'admin' && $_GET['view'] == 'mensaje') : ?>
-			<!-- VISTA MENSAJE -->
+			<?php elseif ($_GET['view'] == 'mensajeEdit' || $_GET['view'] == 'mensaje') : ?>
+			<!-- VISTA MENSAJE Y MENSAJE NUEVO -->
+				<script src="../js/mensaje.js"> $(selector).attr(attributeName);</script>
 				<div class="w3-pale-yellow w3-round w3-padding user-view">
 					<?php
-						$id = $_GET['id'];
+						if ($user_permission == 'admin' && $_GET['id']) {
+							$id = $_GET['id'];
+						} else {
+							$id = null;
+						}
 
 						$objeto = new Mensaje(['db' => $db, 'id' => $id]);
 						
 						$objeto->vistaFormulario();
 					?>
 				</div>
-			<?php elseif ($_GET['view'] == 'mensajeEdit') : ?>
-			<!-- VISTA MENSAJE NUEVO -->
-				
 			<?php elseif ($user_permission == 'admin' && $_GET['view'] == 'mensajeTree') : ?>
-				<div class="w3-pale-yellow w3-round w3-padding user-view">
+			<!-- VISTA MENSAJE LISTA -->
+				<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: auto; text-align:justify">
 					<div style="display:flex; justify-content:center; margin-bottom:20px">
 						<h2> MENSAJES </h2>
 					</div>
 					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0; margin-bottom: 8px">
 						<?php
 							$objeto = new Mensaje(['db' => $db]);
-							
+
 							$result = $objeto->vistaArbol();
 						?>
 					</table>
@@ -404,21 +407,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					<span style="float:right"> 
 					<?php
 					# flechitas
-					vistaOffset($result, 'perroTree');
+					vistaOffset($result, 'mensajeTree');
 					?>
 					</span>
-				</div>
 
-				<script>
-					var mensajes = $('.account');
-					alert('hola');
-					
-					mensajes.each((index, mensaje) => {
-						mensaje.onclick = function(){
-							location.href = './sesion.php?view=mensaje&id=' + perro.id;
-						}
-					});
-				</script>
+					<script>
+						var mensajes = $('.account');
+						
+						mensajes.each((index, mensaje) => {
+							mensaje.onclick = function(){
+								location.href = './sesion.php?view=mensaje&id=' + mensaje.id;
+							}
+						});
+					</script>
+				</div>
 			<?php else : ?>
 				<?php 
 					if ($user_permission == 'admin' && isset($_GET['id'])) {
