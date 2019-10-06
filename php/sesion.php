@@ -381,13 +381,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 						$birthdate = $result['birthdate'];
 						$nacionality = $result['nacionality'];
 						$description = $result['description'];
-						$arr = [ // TODO borrar esto que feo por dios
-							'name' => $name, 
-							'surname' => $surname, 
-							'birthdate' => $birthdate, 
-							'nacionality' => $nacionality, 
-							'description' => $description
-						];
 					} else {
 						echo '
 						<script>
@@ -410,17 +403,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 				<?php if ($_GET['view'] == 'user' || $_GET['view'] == 'user-edit') : ?>
 				<!-- VISTA USUARIO Y EDIT USUARIO -->
-					<script>
-						var server_values = {};
-
-						<?php foreach ($arr as $key => $value) {
-							if (isset($value)) {
-								echo 'server_values[\''.$key.'\'] = \''.$value.'\';';
-							}
-						} 
-						?>
-					</script>
-
 					<div class="w3-pale-yellow w3-round w3-padding user-view">
 						<?php 
 							$usuario = new Usuario(['db' => $db, 'id' => $user_id]);
