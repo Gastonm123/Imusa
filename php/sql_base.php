@@ -81,4 +81,11 @@ trait sql_base {
 
         return $sql;
     }
+
+    private function deleteString($table, $restricciones) {
+        $where = $this->whereString($restricciones);
+        $sql = "DELETE FROM $table WHERE $where";
+
+        return $sql;
+    }
 }

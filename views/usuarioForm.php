@@ -23,7 +23,16 @@ $edicion = (isset($_GET['view']) && $_GET['view'] == 'user-edit');
 </head> -->
 
 <div class="header w3-round">
-    <div class="form-header" style="height: 100%">
+    <?php if ($edicion) : ?>
+        <a  class="go-back w3-blue w3-btn"
+            href="./sesion.php?view=user"><i class="fa fa-arrow-left"></i></a>
+    <?php else: ?>
+        <a  class="go-back w3-blue w3-btn" style="visibility:hidden"
+            href="./sesion.php?view=user"><i class="fa fa-arrow-left"></i></a>
+    <?php endif; ?>
+
+
+    <div class="form-header">
         <div style="display:flex">
             <div class="header-image">
                 <img src="../img/usuario.png" style="width: 100px; height: 100px">

@@ -53,13 +53,13 @@ class Perro extends Base
 
         if (isset($result) && $this->db->error == FALSE) {
             $cont_column = 0;
-            echo '<tr class="w3-green">';
+            echo '<thead class="w3-green">';
             while ($field = $result->fetch_field()) {
-                echo '<th>' . $field->name . '</th>';
+                echo '<td>' . $field->name . '</td>';
 
                 $cont_column++;
             }
-            echo '</tr>';
+            echo '</thead>';
 
             echo '<tbody>';
             for ($cont = 0; $cont < 10; $cont++) {

@@ -47,6 +47,16 @@ if ($data['comando'] == 'update') {
     }
 }
 
+if ($data['comando'] == 'delete') {
+    $result = $db->eliminar_objeto($data['tabla'], $data['restricciones']);
+
+    if ($db->error) {
+        $response['error'] = $db->error;
+    } else {
+        $response['value'] = true;
+    }
+}
+
 header('Content-Type: application/json');
 echo json_encode($response);
 

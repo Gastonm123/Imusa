@@ -120,3 +120,7 @@ article div h2 {
     display:flex;
     justify-content: center;
 }
+
+#waiting-spinner {
+    display: none;
+}

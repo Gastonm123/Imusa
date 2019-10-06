@@ -176,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					<button class="w3-btn w3-teal" onclick="location.href= 'registrarse.php'">Registrarse</button>
 					<button class="w3-btn w3-teal" onclick="mandar_form()" style="width:78px">
 						<span id="sesion-text"> Sesion </span> 
-						<i class="fa fa-spinner" style="display:none" id="waiting-spinner"></i>
+						<i class="fa fa-spinner" id="waiting-spinner"></i>
 					</button>
 				</div>
 			</div>
@@ -213,10 +213,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				</div>
 
 				<a href="./sesion.php" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
-					<i class="fa fa-home icon"></i>HOME
+					<i class="fa fa-home icon"></i>INICIO
 				</a>
 				<a href="./sesion.php?view=user" class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
-					<i class="fa fa-user icon"></i>USER
+					<i class="fa fa-user icon"></i>USUARIO
 				</a>
 				<?php if (get_user_permission($db, $_COOKIE['user']) == 'admin') : ?>
 					<a href='./sesion.php?view=accounts' class="w3-bar-item w3-button w3-margin-top w3-margin-bottom">
@@ -253,6 +253,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 						</h2>
 					</div>		
 				
+					<div class="w3-padding">
+						<button style="visibility:hidden" 
+							class="w3-button w3-light-blue guardar-btn"
+							onclick="guardar()">Guardar</button>
+					</div>
 					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0; margin-bottom: 8px">
 						<?php
 						$offset = getOffset();
@@ -262,12 +267,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 						$result = $usuario->vistaArbol($offset);
 						?>
 					</table>
-					
-					<button style="float:right"
-						class="w3-hide w3-button w3-light-blue guardar-btn"
-						onclick="guardar()">Guardar</button>
 
-					<span style="float:left; padding-left:2px"> Showing <?php echo $result->num_rows ?> out of 10 </span>
+					<span style="float:left; padding-left:2px"> Mostrando <?php echo $result->num_rows ?> de 10 </span>
 					<span style="float:right"> 
 					<?php
 					# flechitas
@@ -299,13 +300,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					</script>
 				</div>
 			<?php elseif ($_GET['view'] == 'perroTree') : ?>
+				<script src="../js/perro.js"></script>
+
 				<div class="w3-pale-yellow w3-round w3-padding" style="width: 100%; height: auto; text-align:justify">
 					<div style="display:flex; justify-content:center; margin-bottom:20px">
 						<h2> MASCOTAS </h2>
 					</div>
 
-					<div class="w3-padding">
+					<div class="w3-padding" id="button_pad">
 						<a href="./sesion.php?view=perro-edit" class="w3-btn w3-blue">Ingresar perro</a>
+						<button onclick="cambiar_modo()" class="w3-btn w3-blue">Sacar perro</button>
 					</div>
 					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0">
 						<?php
@@ -316,7 +320,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 						$result = $perro->vistaArbol($offset);
 						?>
 					</table>
-					<span style="float:left; padding-left:2px"> Showing <?php echo $result->num_rows ?> out of 10 </span>
+					<span style="float:left; padding-left:2px"> Mostrando <?php echo $result->num_rows ?> de 10 </span>
 					<span style="float:right"> 
 					<?php
 					# flechitas
@@ -336,6 +340,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 				</script>
 			<?php elseif ($_GET['view'] == 'perro' || $_GET['view'] == 'perro-edit') : ?>
 			<!-- VISTA PERRO -->
+				<script src="../js/perro.js"></script>
+
 				<div class="w3-pale-yellow w3-round w3-padding user-view">
 						<?php 
 							$perro = new Perro(['db' => $db]);

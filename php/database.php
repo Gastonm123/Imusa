@@ -178,4 +178,15 @@ class Database {
 
         return $result;
     }
+
+    public function eliminar_objeto($tabla, $restricciones) {
+        $sql = $this->deleteString($tabla, $restricciones);
+        $result = $this->query($sql);
+
+        if ($result == false) {
+            $this->error = "Error eliminando objeto de la tabla $tabla";
+        }
+
+        return $result;
+    }
 }
