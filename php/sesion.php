@@ -388,7 +388,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			<!-- VISTA MENSAJE NUEVO -->
 				
 			<?php elseif ($user_permission == 'admin' && $_GET['view'] == 'mensajeTree') : ?>
-				
+				<div class="w3-pale-yellow w3-round w3-padding user-view">
+					<div style="display:flex; justify-content:center; margin-bottom:20px">
+						<h2> MENSAJES </h2>
+					</div>
+					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0; margin-bottom: 8px">
+						<?php
+							$objeto = new Mensaje(['db' => $db]);
+							
+							$result = $objeto->vistaArbol();
+						?>
+					</table>
+
+					<span style="float:left; padding-left:2px"> Mostrando <?php echo $result->num_rows ?> de 10 </span>
+					<span style="float:right"> 
+					<?php
+					# flechitas
+					vistaOffset($result, 'perroTree');
+					?>
+					</span>
+				</div>
+
+				<script>
+					var mensajes = $('.account');
+					alert('hola');
+					
+					mensajes.each((index, mensaje) => {
+						mensaje.onclick = function(){
+							location.href = './sesion.php?view=mensaje&id=' + perro.id;
+						}
+					});
+				</script>
 			<?php else : ?>
 				<?php 
 					if ($user_permission == 'admin' && isset($_GET['id'])) {
