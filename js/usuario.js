@@ -27,10 +27,10 @@ usuarios.each((index, usuario) => {
     }
 });
 
-let div = $('.account .w3-dropdown-content');
+let dropdownDiv = $('.account .w3-dropdown-content');
 
-div.each((index, cosa) => {
-    cosa.onclick = function(e) {
+dropdownDiv.each((index, div) => {
+    div.onclick = function(e) {
         e.stopPropagation();
     }
 });
