@@ -96,7 +96,7 @@ trait sql_base {
 
     private function deleteString($table, $restricciones) {
         $where = $this->whereString($restricciones);
-        $sql = "DELETE FROM $table WHERE $where";
+        $sql = "DELETE FROM $table";
 
         if ($where != '') {
             $sql .= " WHERE $where";

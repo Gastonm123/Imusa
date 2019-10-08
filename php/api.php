@@ -43,7 +43,11 @@ if ($data['comando'] == 'update') {
     if ($db->error) {
         $response['error'] = $db->error;
     } else {
-        $response['value'] = true;
+        if (isset($data['restricciones']['id'])) {
+            $response['value'] = $data['restricciones']['id'];
+        } else {
+            $response['value'] = true;
+        }
     }
 }
 

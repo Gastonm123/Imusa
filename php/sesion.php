@@ -272,9 +272,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					<table class="w3-table w3-striped w3-white w3-hoverable" style="line-height:2.0; margin-bottom: 8px">
 						<?php
 						$offset = getOffset();
-
+						
 						$usuario = new Usuario(['db' => $db]);
-
+						
 						$result = $usuario->vistaArbol($offset);
 						?>
 					</table>
@@ -286,38 +286,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					vistaOffset($result, 'accounts');
 					?>
 					</span>
-
-					<script>
-						var dropdowns = $(".permissions-dropdown");
-						var cambios = [];
-						// configuramos un onclick para cada cuenta
-						
-						for (let i = 0; i < dropdowns.length; i++) {
-							const dropdown = dropdowns[i];
-							
-							$(dropdown).hover(
-							function() {
-								var content = dropdown.children[1];
-								if (content.className.indexOf("w3-show") == -1) {
-									content.className += " w3-show";
-								}
-							}, function () {
-								var content = dropdown.children[1];
-								if (content.className.indexOf("w3-show") != -1) {
-									content.className = content.className.replace(" w3-show", "");
-								}
-							});
-						}
-
-						var usuarios = $('.account');
-						
-						usuarios.each((index, usuario) => {
-							usuario.onclick = function(){
-								location.href = './sesion.php?view=user&id=' + usuario.id;
-							}
-						});
-					</script>
 				</div>
+
+				<script src="../js/usuario.js"></script>
 			<?php elseif ($_GET['view'] == 'perroTree') : ?>
 				<script src="../js/perro.js"></script>
 
