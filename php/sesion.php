@@ -302,7 +302,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 							<a href="./sesion.php?view=perro-edit" class="w3-btn w3-blue">Ingresar perro</a>
 							<button onclick="cambiar_modo()" class="w3-btn w3-blue">Sacar perro</button>
 						<?php else : ?>
-							<button onclick="alert('xd')" class="w3-btn w3-blue">Adoptar perro</button>	
+							<button onclick="adoptar()" class="w3-btn w3-blue">Adoptar perro</button>	
 						<?php endif; ?>
 					</div>
 					

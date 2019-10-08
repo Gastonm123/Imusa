@@ -137,3 +137,57 @@ function aplicar_cambios() {
     // para llamar a otra funcion
     window.setTimeout(cambiar_modo, 1000);
 }
+
+function adoptar() {
+    if (modo == 'normal') {
+        var normal = document.createElement('button');
+        normal.onclick = adoptar;
+        normal.classList = 'w3-btn w3-blue';
+        normal.innerHTML = 'Volver';
+
+        var button_pad = document.getElementById('button_pad');
+        button_pad.innerHTML = ''
+        button_pad.appendChild(normal);
+        button_pad.appendChild(document.createTextNode(' Haga click en el perro q desea adoptar...'));
+
+        $('tbody tr').each((index, row) => {
+            let id = +row.children[0].innerHTML;
+
+            row.onclick = () => mandar_mensaje(id);
+        })
+        modo = 'adopcion';
+    } else {
+        location.reload();
+    }
+}
+
+function getCookie(name) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
+function mandar_mensaje(id) {
+    let usuario = getCookie('user');
+
+    var data = {
+        'comando': 'create',
+        'tabla': 'mensajes', 
+        'values': {
+            'tipo': 'ADOPCION',
+            'emisor': usuario,
+            'asunto': 'Adopcion perro ' + id,
+            'contenido': 'El usuario ' + usuario + ' quiere adoptar el perro con id ' + id
+        } 
+    }
+
+    $.post('api.php', data,
+        function(a, b, c) {
+            if (a['error']) {
+                alert(a['error']);
+            } else {
+                alert('Se ha enviado un mensaje');
+                location.reload();
+            }
+    });
+}
